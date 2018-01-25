@@ -17,5 +17,5 @@ def check_login(url, username, password):
 	return True
 
 @app.route('/login')
-def login(url, username, password):
+def login():
 	return render_template('login.html')
