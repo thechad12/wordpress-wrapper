@@ -4,6 +4,7 @@ import sys
 from passlib.apps import custom_app_context as pass_context
 from wordpress_xmlrpc import Client as wp_client
 
+# Create the user class to be stored in the database
 
 class User(db.Model):
 	__tablename__ = 'user'
