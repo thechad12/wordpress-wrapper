@@ -84,7 +84,7 @@ def edit_post(wp_post_id):
 			edit_wp_post.id = wp_post_id
 			# Check before publishing post
 			edit_wp_post.status = request.form['publish']
-			if edit_wp_post.stats == 'publish':
+			if edit_wp_post.status == 'publish':
 				client.call(posts.EditPost(edit_wp_post.id, edit_wp_post))
 				flash('Post edited successfully')
 				return redirect(url_for('get_posts'))
