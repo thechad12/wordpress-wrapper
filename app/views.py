@@ -47,6 +47,17 @@ def get_posts():
 		wp_posts = client.call(posts.GetPosts())
 		return render_template('posts.html')
 
+# View specific post
+@app.route('/posts/<int:post_id>')
+def view_post(post_id):
+	if 'user' not in login_session:
+		return render_template('index.html')
+	else:
+		client = check_login(login_session['url'], login_session['user'],
+			login_session['password'])
+	wp_post = client.call(posts.GetPost(post_id))
+	return render_template('post.html')
+
 # Create new post
 @app.route('/newpost', methods=['GET', 'POST'])
 def new_post():
