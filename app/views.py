@@ -9,7 +9,8 @@ from flask import session as login_session
 import json
 import random
 import string
-from wordpress_xmlrpc import InvalidCredentialsError, Client, WordPressPost
+from wordpress_xmlrpc import InvalidCredentialsError, Client, WordPressPost,\
+ServerConnectionError
 from wordpress_xmlrpc.methods import posts
 
 @app.route('/')
@@ -20,22 +21,20 @@ def index():
 # Login function
 def check_login(url, username, password):
 	user = User(wp_username=username, wp_password=password, wp_url=url)
-	try:
-		user.authenticate(user.wp_url, user.wp_username, user.wp_password)
-		login_session['user'] = user.wp_username
-		login_session['password'] = user.wp_password
-		login_session['url'] = user.wp_url
-		return user
-	except InvalidCredentialsError:
-		return False
+	user.authenticate(user.wp_url, user.wp_username, user.wp_password)
+	login_session['user'] = user.wp_username
+	login_session['password'] = user.wp_password
+	login_session['url'] = user.wp_url
+	return user
 
 # Create anti-forgery state token
 @app.route('/login')
 def login():
 	state = ''.join(random.choice(
 		string.ascii_uppercase + string.digits)
-	for x in range(32))
+		for x in range(32))
 	login_session['state'] = state
+	print(state)
 	return render_template('login.html', STATE=state)
 
 # Logout function
@@ -64,10 +63,18 @@ def wp_connect():
 		response.headers['Content-Type'] = 'application/json'
 		return response
 	try:
+		login_session['url'] = request.form['url']
+		login_session['user'] = request.form['username']
+		login_session['password'] = request.form['password']
 		check_login(login_session['url'], login_session['user'],
 			login_session['password'])
+		return redirect(url_for('index'))
 	except InvalidCredentialsError:
 		response = make_response(json.dumps('Invalid login'), 401)
+		response.headers['Content-Type'] = 'application/json'
+		return response
+	except ServerConnectionError:
+		response = make_response(json.dumps('Could not connect to server'), 401)
 		response.headers['Content-Type'] = 'application/json'
 		return response
 

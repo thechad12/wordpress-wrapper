@@ -1,0 +1,10 @@
+{% extends "main.html" %}
+{% block content %}
+<body>
+
+<div class="header-menu">
+	<div class="login">
+		<a href="{{ url_for('login', state=STATE) }}">Login</a>
+	</div>
+</div>
+{% endblock %}
