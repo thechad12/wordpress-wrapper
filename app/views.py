@@ -1,10 +1,11 @@
 ''' This file contains the main logic for the CRUD
 operations of the app and their respective routes'''
 
-from app import app, db
+from app import app, db, session
 from models import User
 from flask import render_template, jsonify, redirect, session, url_for,\
 request, make_response, flash
+from flask import session as login_session
 import json
 import random
 import string
@@ -19,13 +20,14 @@ def index():
 # Login function
 def check_login(url, username, password):
 	user = User(wp_username=username, wp_password=password, wp_url=url)
-	if user.authenticate is InvalidCredentialsError:
-		return False
-	else:
+	try:
+		user.authenticate(user.wp_url, user.wp_username, user.wp_password)
 		login_session['user'] = user.wp_username
 		login_session['password'] = user.wp_password
 		login_session['url'] = user.wp_url
 		return user
+	except InvalidCredentialsError:
+		return False
 
 # Create anti-forgery state token
 @app.route('/login')
@@ -35,6 +37,39 @@ def login():
 	for x in range(32))
 	login_session['state'] = state
 	return render_template('login.html', STATE=state)
+
+# Logout function
+@app.route('/logout')
+def logout():
+	session.delete(login_session)
+	session.commit()
+	flash("You have successfully been logged out")
+	return render_template('index.html')
+
+# Create user
+def create_user(login_session):
+	new_user = User(wp_username=login_session['user'],
+		wp_password=login_session['password'], wp_url=login_session['url'])
+	session.add(new_user)
+	session.commit()
+	user = session.query(User).filter_by(wp_username=login_session['user']).one()
+	return user.id
+
+# Login with wordpress
+@app.route('/wpconnect', methods=['GET', 'POST'])
+def wp_connect():
+	# Check that state token is the one created on the server
+	if request.args.get('state') != login_session['state']:
+		response = make_response(json.dumps('Invalid state parameter'), 401)
+		response.headers['Content-Type'] = 'application/json'
+		return response
+	try:
+		check_login(login_session['url'], login_session['user'],
+			login_session['password'])
+	except InvalidCredentialsError:
+		response = make_response(json.dumps('Invalid login'), 401)
+		response.headers['Content-Type'] = 'application/json'
+		return response
 
 # Query posts of user
 @app.route('/posts/')

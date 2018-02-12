@@ -2,6 +2,7 @@ from flask import Flask
 import sqlalchemy
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -10,5 +11,7 @@ app.config.from_object('config')
 # production.
 db = create_engine('sqlite:///users.db')
 Base = declarative_base()
+DBSession = sessionmaker(bind=db)
+session = DBSession()
 
 from app import views, models
