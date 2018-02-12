@@ -6,6 +6,6 @@ python:
 - "3.4"
 install:
 - pip install pipenv
-script: pipenv run python tests.py
+script: pipenv run python test.py
 env:
 - FLASK_VERSION=0.10.1
