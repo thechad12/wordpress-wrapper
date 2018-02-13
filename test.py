@@ -5,7 +5,6 @@ automatically everytime there is a commit'''
 
 import unittest
 from app import app
-from models import User
 
 class TestApp(unittest.TestCase):
 
