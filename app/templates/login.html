@@ -1,0 +1,13 @@
+{% extends "main.html" %}
+{% block content %}
+<div class="wp-login-form">
+	<form action="{{ url_for('wp_connect', state=STATE) }}" method="POST">
+		<input type="text" size="30" name="url">
+		<input type="text" size="30" name="username">
+		<input type="password" size="30" name="password" xhtml="password">
+		<button type="submit"><input type="submit" name="login">
+		Login</button>
+	</form>
+</div>
+
+{% endblock %}
