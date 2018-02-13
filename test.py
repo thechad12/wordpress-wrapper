@@ -4,7 +4,7 @@ a post for a test user account. Test is run
 automatically everytime there is a commit'''
 
 import unittest
-from app import app
+from app import app, models
 
 class TestApp(unittest.TestCase):
 
