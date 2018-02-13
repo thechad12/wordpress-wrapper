@@ -68,7 +68,7 @@ def wp_connect():
 		login_session['password'] = request.form['password']
 		check_login(login_session['url'], login_session['user'],
 			login_session['password'])
-		return redirect(url_for('index'))
+		return redirect(url_for('get_posts'))
 	except InvalidCredentialsError:
 		response = make_response(json.dumps('Invalid login'), 401)
 		response.headers['Content-Type'] = 'application/json'
