@@ -2,7 +2,8 @@ from sqlalchemy import *
 from app import db, Base
 import sys
 from passlib.apps import custom_app_context as pass_context
-from wordpress_xmlrpc import Client as wp_client
+from wordpress_json import WordpressJsonWrapper as wp
+
 
 # Create the user class to be stored in the database
 
@@ -15,7 +16,7 @@ class User(Base):
 	wp_url = Column(String)
 
 	def authenticate(self, url, username, password):
-		wp_login = wp_client(url, username, password)
+		wp_login = wp(url, username, password)
 		return wp_login
 
 	def hash_password(self, password):
@@ -23,4 +24,5 @@ class User(Base):
 
 	def verify_password(self, password):
 		return pass_context.verify(password, self.password_hash)
+
 

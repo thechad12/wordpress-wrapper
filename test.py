@@ -6,6 +6,7 @@ automatically everytime there is a commit'''
 import unittest
 from app import app, db
 from app.models import User
+from app.views import get_posts
 import os
 import config
 
@@ -18,7 +19,7 @@ class TestApp(unittest.TestCase):
 	def test_user_ops(self):
 		u = User()
 		try:
-			u.authenticate('http://test.com', 'test', 'test')
+			u.authenticate('test', 'test', 'test')
 			get_posts()
 		except:
 			pass
