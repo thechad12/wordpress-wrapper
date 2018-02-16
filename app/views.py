@@ -21,11 +21,10 @@ def index():
 # Login function
 def check_login(url, username, password):
 	user = User(wp_username=username, wp_password=password, wp_url=url)
-	user.authenticate(user.wp_url, user.wp_username, user.wp_password)
 	login_session['user'] = user.wp_username
 	login_session['password'] = user.wp_password
 	login_session['url'] = user.wp_url
-	return user
+	return Client(user.wp_url, user.wp_username, user.wp_password)
 
 # Create anti-forgery state token
 @app.route('/login')
@@ -62,21 +61,21 @@ def wp_connect():
 		response = make_response(json.dumps('Invalid state parameter'), 401)
 		response.headers['Content-Type'] = 'application/json'
 		return response
-	try:
-		login_session['url'] = request.form['url']
-		login_session['user'] = request.form['username']
-		login_session['password'] = request.form['password']
-		check_login(login_session['url'], login_session['user'],
-			login_session['password'])
-		return redirect(url_for('get_posts'))
-	except InvalidCredentialsError:
-		response = make_response(json.dumps('Invalid login'), 401)
-		response.headers['Content-Type'] = 'application/json'
-		return response
-	except ServerConnectionError:
-		response = make_response(json.dumps('Could not connect to server'), 401)
-		response.headers['Content-Type'] = 'application/json'
-		return response
+	#try:
+	login_session['url'] = request.form['url']
+	login_session['user'] = request.form['username']
+	login_session['password'] = request.form['password']
+	check_login(login_session['url'], login_session['user'],
+		login_session['password'])
+	return redirect(url_for('get_posts'))
+	#except InvalidCredentialsError:
+	#	response = make_response(json.dumps('Invalid login'), 401)
+	#	response.headers['Content-Type'] = 'application/json'
+	#	return response
+	#except ServerConnectionError:
+	#	response = make_response(json.dumps('Could not connect to server'), 401)
+	#	response.headers['Content-Type'] = 'application/json'
+	#	return response
 
 # Query posts of user
 @app.route('/posts/')
