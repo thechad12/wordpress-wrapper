@@ -2,7 +2,7 @@ from sqlalchemy import *
 from app import db, Base
 import sys
 from passlib.apps import custom_app_context as pass_context
-from wordpress_json import WordpressJsonWrapper as wp
+from wordpress_xmlrpc import Client as wp
 
 
 # Create the user class to be stored in the database
