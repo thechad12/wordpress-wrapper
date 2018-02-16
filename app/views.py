@@ -9,9 +9,7 @@ from flask import session as login_session
 import json
 import random
 import string
-from wordpress_xmlrpc import InvalidCredentialsError, Client, WordPressPost,\
-ServerConnectionError
-from wordpress_xmlrpc.methods import posts
+from wordpress_json import WordpressJsonWrapper as wp
 
 @app.route('/')
 @app.route('/home')
@@ -25,6 +23,7 @@ def check_login(url, username, password):
 	login_session['password'] = user.wp_password
 	login_session['url'] = user.wp_url
 	return Client(user.wp_url, user.wp_username, user.wp_password)
+
 
 # Create anti-forgery state token
 @app.route('/login')
@@ -77,6 +76,7 @@ def wp_connect():
 	#	response.headers['Content-Type'] = 'application/json'
 	#	return response
 
+
 # Query posts of user
 @app.route('/posts/')
 def get_posts():
@@ -85,8 +85,8 @@ def get_posts():
 	else:
 		client = check_login(login_session['url'], login_session['user'],
 			login_session['password'])
-		wp_posts = client.call(posts.GetPosts())
-		return render_template('posts.html')
+		wp_posts = client.get_posts()
+		return wp_posts
 
 # View specific post
 @app.route('/posts/<int:post_id>')
