@@ -1,8 +1,7 @@
 Python Wordpress Wrapper
 =====================
 
-.. image:: https://img.shields.io/twitter/url/https/travis-ci.org/thechad12/wordpress-wrapper.svg
-   :target:  https://travis-ci.org/thechad12/wordpress-wrapper
+![Travis](https://img.shields.io/travis/rust-lang/rust.svg)
 
 
 Light template over wordpress in Python Flask
@@ -11,7 +10,6 @@ Light template over wordpress in Python Flask
 Installation
 ------------
 
-::
 
     pip install pipenv
     pipenv install
@@ -20,6 +18,8 @@ Installation
 Usage & Testing
 ------------
 
-.. code-block:: python
-
     >>> pipenv run python run.py
+    
+Application will run on http://localhost:5000
+
+In the URL field, use your wordpress URL with /xmlrpc.php at the end
