@@ -9,7 +9,10 @@ from flask import session as login_session
 import json
 import random
 import string
-from wordpress_json import WordpressJsonWrapper as wp
+import wordpress_xmlrpc
+from wordpress_xmlrpc import Client as wp
+from wordpress_xmlrpc import WordPressPost
+from wordpress_xmlrpc.methods import posts
 
 @app.route('/')
 @app.route('/home')
@@ -22,7 +25,7 @@ def check_login(url, username, password):
 	login_session['user'] = user.wp_username
 	login_session['password'] = user.wp_password
 	login_session['url'] = user.wp_url
-	return Client(user.wp_url, user.wp_username, user.wp_password)
+	return wp(user.wp_url, user.wp_username, user.wp_password)
 
 
 # Create anti-forgery state token
@@ -85,8 +88,8 @@ def get_posts():
 	else:
 		client = check_login(login_session['url'], login_session['user'],
 			login_session['password'])
-		wp_posts = client.get_posts()
-		return wp_posts
+		wp_posts = client.call(posts.GetPosts())
+		return render_template('posts.html')
 
 # View specific post
 @app.route('/posts/<int:post_id>')
@@ -96,7 +99,7 @@ def view_post(post_id):
 	else:
 		client = check_login(login_session['url'], login_session['user'],
 			login_session['password'])
-	wp_post = client.call(posts.GetPost(post_id))
+		wp_post = client.call(posts.GetPost(post_id))
 	return render_template('post.html')
 
 # Create new post
