@@ -63,21 +63,21 @@ def wp_connect():
 		response = make_response(json.dumps('Invalid state parameter'), 401)
 		response.headers['Content-Type'] = 'application/json'
 		return response
-	#try:
-	login_session['url'] = request.form['url']
-	login_session['user'] = request.form['username']
-	login_session['password'] = request.form['password']
-	check_login(login_session['url'], login_session['user'],
+	try:
+		login_session['url'] = request.form['url']
+		login_session['user'] = request.form['username']
+		login_session['password'] = request.form['password']
+		check_login(login_session['url'], login_session['user'],
 		login_session['password'])
-	return redirect(url_for('get_posts'))
-	#except InvalidCredentialsError:
-	#	response = make_response(json.dumps('Invalid login'), 401)
-	#	response.headers['Content-Type'] = 'application/json'
-	#	return response
-	#except ServerConnectionError:
-	#	response = make_response(json.dumps('Could not connect to server'), 401)
-	#	response.headers['Content-Type'] = 'application/json'
-	#	return response
+		return redirect(url_for('get_posts'))
+	except InvalidCredentialsError:
+		response = make_response(json.dumps('Invalid login'), 401)
+		response.headers['Content-Type'] = 'application/json'
+		return response
+	except ServerConnectionError:
+		response = make_response(json.dumps('Could not connect to server'), 401)
+		response.headers['Content-Type'] = 'application/json'
+		return response
 
 
 # Query posts of user
