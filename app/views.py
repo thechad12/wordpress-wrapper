@@ -189,7 +189,7 @@ def filter_posts():
 			max_show = request.form['number']
 			# show max if max is filled in, otherwise ignore it
 			filtered_posts = client.call(posts.GetPosts({'post_type': custom_filter,
-				'number': max_show})) if max_show != None else client.call(posts.GetPosts({
+				'number': max_show})) if max_show is not None else client.call(posts.GetPosts({
 				'post_type': custom_filter}))
 			return filtered_posts
 		else:
@@ -208,6 +208,11 @@ def order_posts():
 			date = request.form['date']
 			title = request.form['title']
 			order = request.form['order']
+			ordered_posts = client.call(posts.GetPosts({'orderby': date, 'order': order}))
+			return ordered_posts
+		else:
+			return render_template('posts.html')
+
 
 
 
