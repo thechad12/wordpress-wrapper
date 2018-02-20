@@ -5,9 +5,6 @@ app.secret_key = 'secret_key_will_be_set'
 if not app.debug:
 	import logging
 	from logging.handlers import RotatingFileHandler
-	if not file('tmp/wordpress.log'):
-		flags = os.O_CREAT
-		os.open('tmp/wordpress.log', flags)
 	try:
 		file_handler = RotatingFileHandler('tmp/wordpress.log', 'a',
 			1*1024*1024, 10)
