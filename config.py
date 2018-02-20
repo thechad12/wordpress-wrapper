@@ -1,14 +1,22 @@
 from app import app
+import os
 app.secret_key = 'secret_key_will_be_set'
 
 if not app.debug:
 	import logging
 	from logging.handlers import RotatingFileHandler
-	file_handler = RotatingFileHandler('tmp/wordpress.log', 'a',
-		1*1024*1024, 10)
-	file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s:\
-		%(message)s [in %(pathname)s:%(lineo)d]'))
-	app.logger.setLevel(logging.INFO)
-	file_handler.setLevel(logging.INFO)
-	app.logger.info('app log')
+	if not file('tmp/wordpress.log'):
+		flags = os.O_CREAT
+		os.open('tmp/wordpress.log', flags)
+	try:
+		file_handler = RotatingFileHandler('tmp/wordpress.log', 'a',
+			1*1024*1024, 10)
+		file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s:\
+			%(message)s [in %(pathname)s:%(lineo)d]'))
+		app.logger.setLevel(logging.INFO)
+		file_handler.setLevel(logging.INFO)
+		app.logger.info('app log')
+	except IOError:
+		pass
+
 
