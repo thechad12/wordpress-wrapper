@@ -63,7 +63,7 @@ def wp_connect():
 		response = make_response(json.dumps('Invalid state parameter'), 401)
 		response.headers['Content-Type'] = 'application/json'
 		return response
-	#try:
+	#try: *Commented out for debugging and testing*
 	login_session['url'] = request.form['url']
 	login_session['user'] = request.form['username']
 	login_session['password'] = request.form['password']
@@ -174,6 +174,27 @@ def get_pages():
 		wp_pages = client.call(posts.GetPosts({'post_type': 'page'},
 			results_class=WordPressPage))
 		return render_template('pages.html')
+
+# custom filtering functionality
+@app.route('/filterposts/', methods=['GET', 'POST'])
+def filter_posts():
+	if 'user' not in login_session:
+		return render_template('index.html')
+	else:
+		client = check_login(login_session['url'], login_session['user'],
+			login_session['password'])
+		if request.method == 'POST':
+			custom_filter = request.form['filter']
+			max_show = request.form['number']
+			# show max if max is filled in, otherwise ignore it
+			filtered_posts = client.call(posts.GetPosts({'post_type': custom_filter,
+				'number': max_show})) if max_show != None
+			else client.call(posts.GetPosts({
+				'post_type': custom_filter}))
+			return render_template('filterposts.html')
+		else:
+			return render_template('posts.html')
+
 
 
 
