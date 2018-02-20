@@ -175,7 +175,8 @@ def get_pages():
 			results_class=WordPressPage))
 		return render_template('pages.html')
 
-# custom filtering functionality
+# custom filtering functionality,
+# to be shown with AJAX request
 @app.route('/filterposts/', methods=['GET', 'POST'])
 def filter_posts():
 	if 'user' not in login_session:
@@ -188,12 +189,26 @@ def filter_posts():
 			max_show = request.form['number']
 			# show max if max is filled in, otherwise ignore it
 			filtered_posts = client.call(posts.GetPosts({'post_type': custom_filter,
-				'number': max_show})) if max_show != None
-			else client.call(posts.GetPosts({
+				'number': max_show})) if max_show != None else client.call(posts.GetPosts({
 				'post_type': custom_filter}))
-			return render_template('filterposts.html')
+			return filtered_posts
 		else:
 			return render_template('posts.html')
+
+# Custom ordering functionality,
+# to be shown with AJAX request
+@app.route('/orderedposts/', methods=['GET', 'POST'])
+def order_posts():
+	if 'user' not in login_session:
+		return render_template('index.html')
+	else:
+		client = check_login(login_session['url'], login_session['user'],
+			login_session['password'])
+		if request.method == 'POST':
+			date = request.form['date']
+			title = request.form['title']
+			order = request.form['order']
+
 
 
 
