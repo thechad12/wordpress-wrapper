@@ -11,7 +11,7 @@ import random
 import string
 import wordpress_xmlrpc
 from wordpress_xmlrpc import Client as wp
-from wordpress_xmlrpc import WordPressPost
+from wordpress_xmlrpc import WordPressPost, WordPressPage
 from wordpress_xmlrpc.methods import posts
 
 @app.route('/')
@@ -68,13 +68,13 @@ def wp_connect():
 	login_session['user'] = request.form['username']
 	login_session['password'] = request.form['password']
 	check_login(login_session['url'], login_session['user'],
-		login_session['password'])
+	login_session['password'])
 	return redirect(url_for('get_posts'))
 	#except InvalidCredentialsError:
 	#	response = make_response(json.dumps('Invalid login'), 401)
 	#	response.headers['Content-Type'] = 'application/json'
 	#	return response
-	#except ServerConnectionError:
+	#except:
 	#	response = make_response(json.dumps('Could not connect to server'), 401)
 	#	response.headers['Content-Type'] = 'application/json'
 	#	return response
@@ -162,6 +162,19 @@ def delete_post(wp_post_id):
 				return redirect(url_for('get_posts'))
 		else:
 			return render_template('deletepost.html', wp_post_id=wp_post_id)
+
+# Show list of wordpress pages
+@app.route('/pages/')
+def get_pages():
+	if 'user' not in login_session:
+		return render_template('index.html')
+	else:
+		client = check_login(login_session['url'], login_session['user'],
+			login_session['password'])
+		wp_pages = client.call(posts.GetPosts({'post_type': 'page'},
+			results_class=WordPressPage))
+		return render_template('pages.html')
+
 
 
 

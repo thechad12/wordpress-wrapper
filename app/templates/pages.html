@@ -1,0 +1,14 @@
+{% extends "main.html" %}
+{% block content %}
+
+<div class="pages-header">
+	<h3 class="user">{{ user.wp_username }}</h3>
+</div>
+
+<div class="pages">
+	{% for page in wp_pages %}
+	<div class="page-title">{{ page.title }}</div>
+	{% endfor %}
+</div>
+
+{% endblock %}
