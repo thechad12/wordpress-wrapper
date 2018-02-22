@@ -1,7 +1,7 @@
 ''' This file contains the main logic for the CRUD
 operations of the app and their respective routes'''
 
-from app import app, db, session
+from app import app, db, session, login
 from models import User
 from flask import render_template, jsonify, redirect, session, url_for,\
 request, make_response, flash
@@ -13,6 +13,7 @@ import wordpress_xmlrpc
 from wordpress_xmlrpc import Client as wp
 from wordpress_xmlrpc import WordPressPost, WordPressPage
 from wordpress_xmlrpc.methods import posts
+
 
 @app.route('/')
 @app.route('/home')

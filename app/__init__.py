@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_login import LoginManager
 import sqlalchemy
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -6,6 +7,7 @@ from sqlalchemy.orm import sessionmaker
 
 app = Flask(__name__)
 app.config.from_object('config')
+login = LoginManager(app)
 # Temporary database while app is in development/testing.
 # Switch to more secure database outside of app when in
 # production.
