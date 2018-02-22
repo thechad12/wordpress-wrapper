@@ -11,7 +11,7 @@ import random
 import string
 import wordpress_xmlrpc
 from wordpress_xmlrpc import Client as wp
-from wordpress_xmlrpc import WordPressPost
+from wordpress_xmlrpc import WordPressPost, WordPressPage
 from wordpress_xmlrpc.methods import posts
 
 @app.route('/')
@@ -63,18 +63,18 @@ def wp_connect():
 		response = make_response(json.dumps('Invalid state parameter'), 401)
 		response.headers['Content-Type'] = 'application/json'
 		return response
-	#try:
+	#try: *Commented out for debugging and testing*
 	login_session['url'] = request.form['url']
 	login_session['user'] = request.form['username']
 	login_session['password'] = request.form['password']
 	check_login(login_session['url'], login_session['user'],
-		login_session['password'])
+	login_session['password'])
 	return redirect(url_for('get_posts'))
 	#except InvalidCredentialsError:
 	#	response = make_response(json.dumps('Invalid login'), 401)
 	#	response.headers['Content-Type'] = 'application/json'
 	#	return response
-	#except ServerConnectionError:
+	#except:
 	#	response = make_response(json.dumps('Could not connect to server'), 401)
 	#	response.headers['Content-Type'] = 'application/json'
 	#	return response
@@ -162,6 +162,60 @@ def delete_post(wp_post_id):
 				return redirect(url_for('get_posts'))
 		else:
 			return render_template('deletepost.html', wp_post_id=wp_post_id)
+
+# Show list of wordpress pages
+@app.route('/pages/')
+def get_pages():
+	if 'user' not in login_session:
+		return render_template('index.html')
+	else:
+		client = check_login(login_session['url'], login_session['user'],
+			login_session['password'])
+		wp_pages = client.call(posts.GetPosts({'post_type': 'page'},
+			results_class=WordPressPage))
+		return render_template('pages.html')
+
+# custom filtering functionality,
+# to be shown with AJAX request
+@app.route('/filterposts/', methods=['GET', 'POST'])
+def filter_posts():
+	if 'user' not in login_session:
+		return render_template('index.html')
+	else:
+		client = check_login(login_session['url'], login_session['user'],
+			login_session['password'])
+		if request.method == 'POST':
+			custom_filter = request.form['filter']
+			max_show = request.form['number']
+			# show max if max is filled in, otherwise ignore it
+			filtered_posts = client.call(posts.GetPosts({'post_type': custom_filter,
+				'number': max_show})) if max_show is not None else client.call(posts.GetPosts({
+				'post_type': custom_filter}))
+			return filtered_posts
+		else:
+			return render_template('posts.html')
+
+# Custom ordering functionality,
+# to be shown with AJAX request
+@app.route('/orderedposts/', methods=['GET', 'POST'])
+def order_posts():
+	if 'user' not in login_session:
+		return render_template('index.html')
+	else:
+		client = check_login(login_session['url'], login_session['user'],
+			login_session['password'])
+		if request.method == 'POST':
+			date = request.form['date']
+			title = request.form['title']
+			order = request.form['order']
+			ordered_posts = client.call(posts.GetPosts({'orderby': date, 'order': order}))
+			return ordered_posts
+		else:
+			return render_template('posts.html')
+
+
+
+
 
 
 
