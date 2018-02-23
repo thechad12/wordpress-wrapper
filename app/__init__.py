@@ -8,6 +8,7 @@ from sqlalchemy.orm import sessionmaker
 app = Flask(__name__)
 app.config.from_object('config')
 login = LoginManager(app)
+login.login_view = 'login'
 # Temporary database while app is in development/testing.
 # Switch to more secure database outside of app when in
 # production.
