@@ -3,6 +3,7 @@ operations of the app and their respective routes'''
 
 from app import app, db, session, login
 from models import User
+from forms import RegistrationForm
 from flask import render_template, jsonify, redirect, session, url_for,\
 request, make_response, flash
 from flask import session as login_session
@@ -41,23 +42,30 @@ def login():
 
 # Logout function
 @login_required
-@app.route('/logout')
+@app.route('/logout/')
 def logout():
 	logout_user()
 	flash("You have successfully been logged out")
 	return redirect(url_for('index'))
 
-# Create user
-def create_user(login_session):
-	new_user = User(wp_username=login_session['user'],
-		wp_password=login_session['password'], wp_url=login_session['url'])
-	session.add(new_user)
-	session.commit()
-	user = session.query(User).filter_by(wp_username=login_session['user']).one()
-	return user.id
+# Register and create new user
+@app.route('/register/', methods=['GET', 'POST'])
+def register():
+	if current_user.is_authenticated:
+		return redirect(url_for('index'))
+	form = RegistrationForm()
+	if form.validate_on_submit():
+		user = User(wp_username=form.wp_username, wp_url=form.wp_url,
+			wp_password=form.wp_password)
+		db.session.add(user)
+		db.session.commit()
+		flash('You have now registered')
+		return redirect(url_for('login'))
+	return render_template('register.html',title='Register', form=form)
+
 
 # Login with wordpress
-@app.route('/wpconnect', methods=['GET', 'POST'])
+@app.route('/wpconnect/', methods=['GET', 'POST'])
 def wp_connect():
 	# Check that state token is the one created on the server
 	if request.args.get('state') != login_session['state']:
