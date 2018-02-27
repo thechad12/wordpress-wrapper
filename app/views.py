@@ -75,12 +75,12 @@ def wp_connect():
 	if current_user.is_authenticated:
 		return redirect(url_for('index'))
 	try:
-		wp_url = request.form['url']
 		wp_user = request.form['username']
 		wp_password = request.form['password']
-		check_login(wp_url, wp_user, wp_password)
+		user = db.session.query(User).filter_by(wp_username=wp_user)
+		check_login(user.wp_url, user.wp_user, user.wp_password)
 		return redirect(url_for('get_posts'))
-	except InvalidCredentialsError:
+	except:
 		response = make_response(json.dumps('Invalid login'), 401)
 		response.headers['Content-Type'] = 'application/json'
 		return response

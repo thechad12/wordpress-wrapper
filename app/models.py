@@ -1,5 +1,5 @@
 from sqlalchemy import *
-from app import db, Base
+from app import db, Base, login
 import sys
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
@@ -25,5 +25,11 @@ class User(UserMixin, Base):
 
 	def check_password(self, password):
 		return check_password(self.password_hash, password)
+
+
+# Function to store login information in session
+@login.user_loader
+def load_user(user_id):
+	return db.session.query(User).filter_by(id=user_id).one()
 
 

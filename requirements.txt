@@ -1,0 +1,12 @@
+flask
+sqlalchemy
+httplib2
+wordpress-api
+python-wordpress-xmlrpc
+passlib
+unittest2
+colorama
+python-wordpress
+requests-oauthlib
+wordpress-json
+requests
