@@ -15,4 +15,4 @@ DBSession = sessionmaker(bind=db)
 session = DBSession()
 
 from app import views, models
-from models import User
+from app.models import User

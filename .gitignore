@@ -1,3 +1,5 @@
 *.pyc
 *.lock
 *.log
+__pycache__/
+*.txt

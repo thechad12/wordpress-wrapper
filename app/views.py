@@ -2,7 +2,7 @@
 operations of the app and their respective routes'''
 
 from app import app, db, session
-from models import User
+from app.models import User
 from flask import render_template, jsonify, redirect, session, url_for,\
 request, make_response, flash
 from flask import session as login_session
@@ -35,7 +35,6 @@ def login():
 		string.ascii_uppercase + string.digits)
 		for x in range(32))
 	login_session['state'] = state
-	print(state)
 	return render_template('login.html', STATE=state)
 
 # Logout function
@@ -89,7 +88,7 @@ def get_posts():
 		client = check_login(login_session['url'], login_session['user'],
 			login_session['password'])
 		wp_posts = client.call(posts.GetPosts())
-		return render_template('posts.html')
+		return render_template('posts.html', wp_posts=wp_posts)
 
 # View specific post
 @app.route('/posts/<int:post_id>')
@@ -100,7 +99,7 @@ def view_post(post_id):
 		client = check_login(login_session['url'], login_session['user'],
 			login_session['password'])
 		wp_post = client.call(posts.GetPost(post_id))
-	return render_template('post.html')
+	return render_template('post.html', post=wp_post)
 
 # Create new post
 @app.route('/newpost', methods=['GET', 'POST'])
@@ -111,16 +110,14 @@ def new_post():
 		client = check_login(login_session['url'], login_session['user'],
 			login_session['password'])
 		if request.method == 'POST':
-			new_wp_post = WordPressPost
+			new_wp_post = WordPressPost()
 			new_wp_post.title = request.form['title']
 			new_wp_post.content = request.form['content']
 			new_wp_post.id = client.call(posts.NewPost(new_wp_post))
 			# Allow user to check post before publishing
-			new_wp_post.status = request.form['publish']
-			if new_wp_post.status == 'publish':
-				client.call(posts.EditPost(new_wp_post.id, new_wp_post))
-				flash('New post successfully added')
-				return redirect(url_for('get_posts'))
+			new_wp_post.status = 'publish'
+			flash('New post successfully added')
+			return redirect(url_for('get_posts'))
 		else:
 			return render_template('newpost.html')
 
@@ -133,16 +130,13 @@ def edit_post(wp_post_id):
 		client = check_login(login_session['url'], login_session['user'],
 			login_session['password'])
 		if request.method == 'POST':
-			edit_wp_post = WordPressPost
+			edit_wp_post = WordPressPost()
 			edit_wp_post.title = request.form['title']
 			edit_wp_post.content = request.form['content']
 			edit_wp_post.id = wp_post_id
-			# Check before publishing post
-			edit_wp_post.status = request.form['publish']
-			if edit_wp_post.status == 'publish':
-				client.call(posts.EditPost(edit_wp_post.id, edit_wp_post))
-				flash('Post edited successfully')
-				return redirect(url_for('get_posts'))
+			client.call(posts.EditPost(edit_wp_post.id, edit_wp_post))
+			flash('Post edited successfully')
+			return redirect(url_for('get_posts'))
 		else:
 			return render_template('editpost.html', wp_post_id=wp_post_id)
 
@@ -154,14 +148,13 @@ def delete_post(wp_post_id):
 	else:
 		client = check_login(login_session['url'], login_session['user'],
 			login_session['password'])
+		wp_post = client.call(posts.GetPost(wp_post_id))
 		if request.method == 'POST':
-			delete_wp_post = request.form['delete']
-			if delete_wp_post == 'delete':
-				client.call(posts.DeletePost(wp_post_id))
-				flash('Post deleted successfully')
-				return redirect(url_for('get_posts'))
+			client.call(posts.DeletePost(wp_post_id))
+			flash('Post deleted successfully')
+			return redirect(url_for('get_posts'))
 		else:
-			return render_template('deletepost.html', wp_post_id=wp_post_id)
+			return render_template('deletepost.html', wp_post_id=wp_post_id, post=wp_post)
 
 # Show list of wordpress pages
 @app.route('/pages/')
