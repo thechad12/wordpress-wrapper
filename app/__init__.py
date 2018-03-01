@@ -15,7 +15,7 @@ login.login_view = 'login'
 db = create_engine('sqlite:///users.db')
 Base = declarative_base()
 DBSession = sessionmaker(bind=db)
-session = DBSession()
+dbsession = DBSession()
 
 from app import views, models
 from models import User

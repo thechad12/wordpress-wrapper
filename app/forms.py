@@ -7,6 +7,4 @@ class RegistrationForm(FlaskForm):
 	wp_username = StringField('Username', validators=[DataRequired()])
 	wp_url = StringField('URL', validators=[DataRequired()])
 	wp_password = PasswordField('Password', validators=[DataRequired()])
-	password2 = PasswordField('Repeat Password', validators=[DataRequired(),
-		EqualTo(wp_password)])
 	submit = SubmitField('Register')

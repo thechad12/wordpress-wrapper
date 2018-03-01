@@ -1,10 +1,10 @@
 ''' This file contains the main logic for the CRUD
 operations of the app and their respective routes'''
 
-from app import app, db, session, login
+from app import app, db, dbsession, login
 from models import User
 from forms import RegistrationForm
-from flask import render_template, jsonify, redirect, session, url_for,\
+from flask import render_template, jsonify, redirect, url_for,\
 request, make_response, flash
 from flask import session as login_session
 from flask_login import current_user, login_user, logout_user, login_required
@@ -57,10 +57,14 @@ def register():
 	if form.validate_on_submit():
 		user = User(wp_username=form.wp_username, wp_url=form.wp_url,
 			wp_password=form.wp_password)
-		db.session.add(user)
-		db.session.commit()
-		flash('You have now registered')
-		return redirect(url_for('login'))
+		try:
+			dbsession.add(user)
+			dbsession.commit()
+			flash('You have now registered')
+			return redirect(url_for('login'))
+		except:
+			dbsession.rollback()
+			flash('There was an issue with creating your account')
 	return render_template('register.html',title='Register', form=form)
 
 
