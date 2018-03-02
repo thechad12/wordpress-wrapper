@@ -25,11 +25,14 @@ def index():
 # Login function
 def check_login(url, username, password):
 	user = User(wp_username=username, wp_password=password, wp_url=url)
-	if user is None or not user.check_password(user.wp_password):
-		flash('Invalid username or password')
-		return redirect(url_for('login'))
+	login_session['user'] = user.wp_username
+	login_session['password'] = user.wp_password
+	login_session['url'] = user.wp_url
 	return wp(user.wp_url, user.wp_username, user.wp_password)
 
+def get_url(username):
+	user = dbsession.query(User).filter_by(wp_username=username).one()
+	return user.wp_url
 
 # Create anti-forgery state token
 @app.route('/login')
@@ -41,7 +44,6 @@ def login():
 	return render_template('login.html', STATE=state)
 
 # Logout function
-@login_required
 @app.route('/logout/')
 def logout():
 	logout_user()
@@ -72,123 +74,149 @@ def wp_connect():
 		response = make_response(json.dumps('Invalid state parameter'), 401)
 		response.headers['Content-Type'] = 'application/json'
 		return response
-	if current_user.is_authenticated:
-		return redirect(url_for('index'))
-	wp_user = request.form['username']
-	wp_password = request.form['password']
-	user = dbsession.query(User).filter_by(wp_username=wp_user)
-	check_login(user.wp_url, user.wp_username, user.wp_password)
+	#try: *Commented out for debugging and testing*
+	login_session['user'] = request.form['username']
+	login_session['password'] = request.form['password']
+	login_session['url'] = get_url(login_session['user'])
+	check_login(login_session['url'], login_session['user'],
+	login_session['password'])
 	return redirect(url_for('get_posts'))
+	#except InvalidCredentialsError:
+	#	response = make_response(json.dumps('Invalid login'), 401)
+	#	response.headers['Content-Type'] = 'application/json'
+	#	return response
+	#except:
+	#	response = make_response(json.dumps('Could not connect to server'), 401)
+	#	response.headers['Content-Type'] = 'application/json'
+#	return response
 
 
 # Query posts of user
 @app.route('/posts/')
-@login_required
 def get_posts():
-	client = check_login(user.wp_url, user.wp_username, user.wp_password)
-	wp_posts = client.call(posts.GetPosts())
-	return render_template('posts.html')
+	if 'user' not in login_session:
+		return render_template('index.html')
+	else:
+		client = check_login(login_session['url'], login_session['user'],
+			login_session['password'])
+		wp_posts = client.call(posts.GetPosts())
+		return render_template('posts.html', wp_posts=wp_posts)
 
 # View specific post
 @app.route('/posts/<int:post_id>')
-@login_required
 def view_post(post_id):
-	client = check_login(user.wp_url, user.wp_username, user.wp_password)
-	wp_post = client.call(posts.GetPost(post_id))
-	return render_template('post.html')
+	if 'user' not in login_session:
+		return render_template('index.html')
+	else:
+		client = check_login(login_session['url'], login_session['user'],
+			login_session['password'])
+		wp_post = client.call(posts.GetPost(post_id))
+	return render_template('post.html', post=wp_post)
 
 # Create new post
 @app.route('/newpost', methods=['GET', 'POST'])
-@login_required
 def new_post():
-	client = check_login(user.wp_url, user.wp_username, user.wp_password)
-	if request.method == 'POST':
-		new_wp_post = WordPressPost
-		new_wp_post.title = request.form['title']
-		new_wp_post.content = request.form['content']
-		new_wp_post.id = client.call(posts.NewPost(new_wp_post))
-		# Allow user to check post before publishing
-		new_wp_post.status = request.form['publish']
-		if new_wp_post.status == 'publish':
-			client.call(posts.EditPost(new_wp_post.id, new_wp_post))
+	if 'user' not in login_session:
+		return render_template('index.html')
+	else:
+		client = check_login(login_session['url'], login_session['user'],
+			login_session['password'])
+		if request.method == 'POST':
+			new_wp_post = WordPressPost()
+			new_wp_post.title = request.form['title']
+			new_wp_post.content = request.form['content']
+			new_wp_post.id = client.call(posts.NewPost(new_wp_post))
+			# Allow user to check post before publishing
+			new_wp_post.status = 'publish'
 			flash('New post successfully added')
 			return redirect(url_for('get_posts'))
-	else:
-		return render_template('newpost.html')
+		else:
+			return render_template('newpost.html')
 
 # Edit existing post
 @app.route('/posts/<int:wp_post_id>/edit', methods=['GET', 'POST'])
-@login_required
 def edit_post(wp_post_id):
-	client = check_login(user.wp_url, user.wp_username, user.wp_password)
-	if request.method == 'POST':
-		edit_wp_post = WordPressPost
-		edit_wp_post.title = request.form['title']
-		edit_wp_post.content = request.form['content']
-		edit_wp_post.id = wp_post_id
-		# Check before publishing post
-		edit_wp_post.status = request.form['publish']
-		if edit_wp_post.status == 'publish':
+	if 'user' not in login_session:
+		return render_template('index.html')
+	else:
+		client = check_login(login_session['url'], login_session['user'],
+			login_session['password'])
+		if request.method == 'POST':
+			edit_wp_post = WordPressPost()
+			edit_wp_post.title = request.form['title']
+			edit_wp_post.content = request.form['content']
+			edit_wp_post.id = wp_post_id
 			client.call(posts.EditPost(edit_wp_post.id, edit_wp_post))
 			flash('Post edited successfully')
 			return redirect(url_for('get_posts'))
-	else:
-		return render_template('editpost.html', wp_post_id=wp_post_id)
+		else:
+			return render_template('editpost.html', wp_post_id=wp_post_id)
 
 # Delete an existing post
 @app.route('/posts/<int:wp_post_id>/delete', methods=['GET', 'POST'])
-@login_required
 def delete_post(wp_post_id):
-	client = check_login(user.wp_url, user.wp_username, user.wp_password)
-	if request.method == 'POST':
-		delete_wp_post = request.form['delete']
-		if delete_wp_post == 'delete':
+	if 'user' not in login_session:
+		return render_template('index.html')
+	else:
+		client = check_login(login_session['url'], login_session['user'],
+			login_session['password'])
+		wp_post = client.call(posts.GetPost(wp_post_id))
+		if request.method == 'POST':
 			client.call(posts.DeletePost(wp_post_id))
 			flash('Post deleted successfully')
 			return redirect(url_for('get_posts'))
-	else:
-		return render_template('deletepost.html', wp_post_id=wp_post_id)
+		else:
+			return render_template('deletepost.html', wp_post_id=wp_post_id, post=wp_post)
 
 # Show list of wordpress pages
 @app.route('/pages/')
-@login_required
 def get_pages():
-	client = check_login(user.wp_url, user.wp_username, user.wp_password)
-	wp_pages = client.call(posts.GetPosts({'post_type': 'page'},
-		results_class=WordPressPage))
-	return render_template('pages.html')
+	if 'user' not in login_session:
+		return render_template('index.html')
+	else:
+		client = check_login(login_session['url'], login_session['user'],
+			login_session['password'])
+		wp_pages = client.call(posts.GetPosts({'post_type': 'page'},
+			results_class=WordPressPage))
+		return render_template('pages.html')
 
 # custom filtering functionality,
 # to be shown with AJAX request
 @app.route('/filterposts/', methods=['GET', 'POST'])
-@login_required
 def filter_posts():
-	client = check_login(user.wp_url, user.wp_username, user.wp_password)
-	if request.method == 'POST':
-		custom_filter = request.form['filter']
-		max_show = request.form['number']
-		# show max if max is filled in, otherwise ignore it
-		filtered_posts = client.call(posts.GetPosts({'post_type': custom_filter,
-			'number': max_show})) if max_show is not None else client.call(posts.GetPosts({
-			'post_type': custom_filter}))
-		return filtered_posts
+	if 'user' not in login_session:
+		return render_template('index.html')
 	else:
-		return render_template('posts.html')
+		client = check_login(login_session['url'], login_session['user'],
+			login_session['password'])
+		if request.method == 'POST':
+			custom_filter = request.form['filter']
+			max_show = request.form['number']
+			# show max if max is filled in, otherwise ignore it
+			filtered_posts = client.call(posts.GetPosts({'post_type': custom_filter,
+				'number': max_show})) if max_show is not None else client.call(posts.GetPosts({
+				'post_type': custom_filter}))
+			return filtered_posts
+		else:
+			return render_template('posts.html')
 
 # Custom ordering functionality,
 # to be shown with AJAX request
 @app.route('/orderedposts/', methods=['GET', 'POST'])
-@login_required
 def order_posts():
-	client = check_login(user.wp_url, user.wp_username, user.wp_password)
-	if request.method == 'POST':
-		date = request.form['date']
-		title = request.form['title']
-		order = request.form['order']
-		ordered_posts = client.call(posts.GetPosts({'orderby': date, 'order': order}))
-		return ordered_posts
+	if 'user' not in login_session:
+		return render_template('index.html')
 	else:
-		return render_template('posts.html')
+		client = check_login(login_session['url'], login_session['user'],
+			login_session['password'])
+		if request.method == 'POST':
+			date = request.form['date']
+			title = request.form['title']
+			order = request.form['order']
+			ordered_posts = client.call(posts.GetPosts({'orderby': date, 'order': order}))
+			return ordered_posts
+		else:
+			return render_template('posts.html')
 
 
 
