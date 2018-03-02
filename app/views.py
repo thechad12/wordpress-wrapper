@@ -55,16 +55,12 @@ def register():
 		return redirect(url_for('index'))
 	form = RegistrationForm()
 	if form.validate_on_submit():
-		user = User(wp_username=form.wp_username, wp_url=form.wp_url,
-			wp_password=form.wp_password)
-		try:
-			dbsession.add(user)
-			dbsession.commit()
-			flash('You have now registered')
-			return redirect(url_for('login'))
-		except:
-			dbsession.rollback()
-			flash('There was an issue with creating your account')
+		user = User(wp_username=form.wp_username.data, wp_url=form.wp_url.data,
+			wp_password=form.wp_password.data)
+		dbsession.add(user)
+		dbsession.commit()
+		flash('You have now registered')
+		return redirect(url_for('login'))
 	return render_template('register.html',title='Register', form=form)
 
 
@@ -78,16 +74,11 @@ def wp_connect():
 		return response
 	if current_user.is_authenticated:
 		return redirect(url_for('index'))
-	try:
-		wp_user = request.form['username']
-		wp_password = request.form['password']
-		user = db.session.query(User).filter_by(wp_username=wp_user)
-		check_login(user.wp_url, user.wp_user, user.wp_password)
-		return redirect(url_for('get_posts'))
-	except:
-		response = make_response(json.dumps('Invalid login'), 401)
-		response.headers['Content-Type'] = 'application/json'
-		return response
+	wp_user = request.form['username']
+	wp_password = request.form['password']
+	user = dbsession.query(User).filter_by(wp_username=wp_user)
+	check_login(user.wp_url, user.wp_username, user.wp_password)
+	return redirect(url_for('get_posts'))
 
 
 # Query posts of user
