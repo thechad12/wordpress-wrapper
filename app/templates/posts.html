@@ -10,4 +10,8 @@
 		<a href="{{ url_for('delete_post', wp_post_id=post.id) }}" class="delete">Delete Post</a>
 	{% endfor %}
 </div>
+
+<div class="new-post-link">
+	<a href="{{ url_for('new_post') }}" class="new">Write a new post</a>
+</div>
 {% endblock %}
