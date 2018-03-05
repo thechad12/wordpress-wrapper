@@ -17,6 +17,8 @@ Base = declarative_base()
 DBSession = sessionmaker(bind=db)
 dbsession = DBSession()
 
+
 from app import views, models, session
 from models import User
 from session import *
+

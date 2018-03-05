@@ -23,7 +23,6 @@ from wordpress_xmlrpc.methods import posts
 def index():
 	return render_template('index.html')
 
-# Server error handling
 @app.errorhandler(404)
 def not_found(error):
 	return render_template('error/404.html'), 404
