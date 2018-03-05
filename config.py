@@ -1,4 +1,4 @@
-from app import app
+from app import *
 import os
 app.secret_key = 'secret_key_will_be_set'
 
@@ -16,4 +16,5 @@ if not app.debug:
 	except IOError:
 		pass
 
+SQLALCHEMY_DB_URI = 'sqlite:///users.db'
 
