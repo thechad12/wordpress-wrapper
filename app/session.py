@@ -42,3 +42,14 @@ def logout():
 def check_logged_in(session):
 	if 'user' not in session:
 		return render_template('index.html')
+
+# Generate csrf token for registration and
+# any other functions where it may be necessary
+# in the future
+def gen_csrf_token():
+	csrf = ''.join(random.choice(
+		string.ascii_uppercase + string.digits)
+	for x in range(32))
+	login_session['csrf_token'] = csrf
+	return csrf
+

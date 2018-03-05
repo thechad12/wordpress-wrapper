@@ -7,7 +7,7 @@
 		<a href="{{ url_for('login', state=STATE) }}">Login</a>
 	</div>
 	<div class="register">
-		<a href="{{ url_for('register') }}">Register</a>
+		<a href="{{ url_for('register', token=token) }}">Register</a>
 	</div>
 </div>
 {% endblock %}

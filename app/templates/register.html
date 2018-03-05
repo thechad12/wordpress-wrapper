@@ -2,7 +2,7 @@
 {% block content %}
 
 <div class="registration-form">
-	<form action="{{ url_for('register') }}" method="post">
+	<form action="{{ url_for('register', csrf_token=csrf) }}" method="post">
 		{{ form.hidden_tag() }}
 		<p>
 			{{ form.wp_username.label }}<br/>

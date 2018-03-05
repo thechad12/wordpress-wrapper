@@ -6,7 +6,7 @@ from models import User
 from session import *
 from forms import RegistrationForm
 from flask import render_template, jsonify, redirect, url_for,\
-request, make_response, flash
+request, make_response, flash, abort
 from flask import session as login_session
 from flask_login import current_user, login_user, logout_user, login_required
 import json
@@ -33,10 +33,11 @@ def server_error(error):
 	return render_template('error/500.html'), 500
 
 # Register and create new user
-@app.route('/register/', methods=['GET', 'POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def register():
 	if current_user.is_authenticated:
 		return redirect(url_for('index'))
+	csrf = gen_csrf_token()
 	form = RegistrationForm()
 	if form.validate_on_submit():
 		user = User(wp_username=form.wp_username.data, wp_url=form.wp_url.data,
@@ -45,7 +46,8 @@ def register():
 		dbsession.commit()
 		flash('You have now registered')
 		return redirect(url_for('login'))
-	return render_template('register.html',title='Register', form=form)
+	return render_template('register.html',title='Register', form=form,
+		token=csrf)
 
 
 # Login with wordpress
@@ -53,8 +55,7 @@ def register():
 def wp_connect():
 	# Check that state token is the one created on the server
 	if request.args.get('state') != login_session['state']:
-		flash("Invalid state token")
-		return render_template('error/401.html')
+		abort(403)
 	login_session['user'] = request.form['username']
 	login_session['password'] = request.form['password']
 	login_session['url'] = get_url(login_session['user'])
