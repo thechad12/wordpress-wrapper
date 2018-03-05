@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "8689d59738c55bd7f6b4175f8909d9795269f1fa8e10b2e62b92391361e50cbb"
+            "sha256": "08435b15d62c54f2938ec85338ea62f0a5f5ac932efb94951819c339252eb23f"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -76,6 +76,19 @@
                 "sha256:49f44461237b69ecd901cc7ce66feea0319b9158743dd27a2899962ab214dac1"
             ],
             "version": "==0.12.2"
+        },
+        "flask-login": {
+            "hashes": [
+                "sha256:c815c1ac7b3e35e2081685e389a665f2c74d7e077cb93cecabaea352da4752ec"
+            ],
+            "version": "==0.4.1"
+        },
+        "flask-wtf": {
+            "hashes": [
+                "sha256:d9a9e366b32dcbb98ef17228e76be15702cd2600675668bca23f63a7947fd5ac",
+                "sha256:5d14d55cfd35f613d99ee7cba0fc3fbbe63ba02f544d349158c14ca15561cc36"
+            ],
+            "version": "==0.14.2"
         },
         "httplib2": {
             "hashes": [
@@ -258,6 +271,12 @@
                 "sha256:e43091bd6d0ec4ede74c5650dc4442c4bfbf8d2885ac2b212889b8bdb5ed21fc"
             ],
             "version": "==0.3.1"
+        },
+        "wtforms": {
+            "hashes": [
+                "sha256:ffdf10bd1fa565b8233380cb77a304cd36fd55c73023e91d4b803c96bc11d46f"
+            ],
+            "version": "==2.1"
         }
     },
     "develop": {}

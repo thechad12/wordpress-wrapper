@@ -1,13 +1,14 @@
 from sqlalchemy import *
-from app import db, Base
+from app import db, Base, login
 import sys
-from passlib.apps import custom_app_context as pass_context
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
 from wordpress_xmlrpc import Client as wp
 
 
 # Create the user class to be stored in the database
 
-class User(Base):
+class User(UserMixin, Base):
 	__tablename__ = 'user'
 
 	id = Column(Integer, primary_key=True)
@@ -19,10 +20,16 @@ class User(Base):
 		wp_login = wp(url, username, password)
 		return wp_login
 
-	def hash_password(self, password):
-		self.password_hash = pass_context.encrypt(password)
+	def set_password_hash(self, password):
+		self.password_hash = generate_password_hash(password)
 
-	def verify_password(self, password):
-		return pass_context.verify(password, self.password_hash)
+	def check_password(self, password):
+		return check_password(self.password_hash, password)
+
+
+# Function to store login information in session
+@login.user_loader
+def load_user(user_id):
+	return db.session.query(User).filter_by(id=user_id).one()
 
 
