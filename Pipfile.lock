@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "08435b15d62c54f2938ec85338ea62f0a5f5ac932efb94951819c339252eb23f"
+            "sha256": "ae40f6dcbfd034f032c710b6ad64820c9476781a3a12ce391d3f666a92b22ce3"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -17,7 +17,9 @@
             "sys_platform": "darwin"
         },
         "pipfile-spec": 6,
-        "requires": {},
+        "requires": {
+            "python_full_version": "2.7.10"
+        },
         "sources": [
             {
                 "name": "pypi",
@@ -69,6 +71,13 @@
                 "sha256:48eb22f4f8461b1df5734a074b57042430fb06e1d61bd1e11b078c0fe6d7a1f1"
             ],
             "version": "==0.3.9"
+        },
+        "decorator": {
+            "hashes": [
+                "sha256:94d1d8905f5010d74bbbd86c30471255661a14187c45f8d7f3e5aa8540fdb2e5",
+                "sha256:7d46dd9f3ea1cf5f06ee0e4e1277ae618cf48dfb10ada7c8427cd46c42702a0e"
+            ],
+            "version": "==4.2.1"
         },
         "flask": {
             "hashes": [
@@ -187,6 +196,13 @@
             ],
             "version": "==1.7.1"
         },
+        "pbr": {
+            "hashes": [
+                "sha256:60c25b7dfd054ef9bb0ae327af949dd4676aa09ac3a9471cdc871d8a9213f9ac",
+                "sha256:05f61c71aaefc02d8e37c0a3eeb9815ff526ea28b3b76324769e6158d7f95be1"
+            ],
+            "version": "==3.1.1"
+        },
         "python-wordpress": {
             "hashes": [
                 "sha256:feb305a7f3697af4fc558be5787c429db23f1e6fd43d8a17caf4ba6d60ac508c"
@@ -231,6 +247,26 @@
                 "sha256:6997507af46b10630e13b605ac278b78885fd683d038896dbee0e7ec41d809d2"
             ],
             "version": "==1.2.4"
+        },
+        "sqlalchemy-migrate": {
+            "hashes": [
+                "sha256:14e020626ba256a272f46bf15508d6cce4f715dec6430601a37f0e97bb256785",
+                "sha256:e68af5e3e0561f629d4eb23d9d0ea77d2649747f2eff37fd29aece74615ca251"
+            ],
+            "version": "==0.11.0"
+        },
+        "sqlparse": {
+            "hashes": [
+                "sha256:d9cf190f51cbb26da0412247dfe4fb5f4098edb73db84e02f9fc21fdca31fed4",
+                "sha256:ce028444cfab83be538752a2ffdb56bc417b7784ff35bb9a3062413717807dec"
+            ],
+            "version": "==0.2.4"
+        },
+        "tempita": {
+            "hashes": [
+                "sha256:cacecf0baa674d356641f1d406b8bff1d756d739c46b869a54de515d08e6fc9c"
+            ],
+            "version": "==0.5.2"
         },
         "traceback2": {
             "hashes": [

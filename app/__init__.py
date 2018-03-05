@@ -12,7 +12,8 @@ login.login_view = 'login'
 # Temporary database while app is in development/testing.
 # Switch to more secure database outside of app when in
 # production.
-db = create_engine('sqlite:///users.db')
+db_uri = 'sqlite:///users.db'
+db = create_engine(db_uri)
 Base = declarative_base()
 DBSession = sessionmaker(bind=db)
 dbsession = DBSession()

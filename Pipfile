@@ -4,6 +4,8 @@ url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
+[requires]
+python_full_version = "2.7.10"
 
 [dev-packages]
 
@@ -29,3 +31,4 @@ werkzeug = "*"
 flask-wtf = "*"
 wtforms = "*"
 requests = "*"
+sqlalchemy-migrate = "*"
