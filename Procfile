@@ -1,2 +1,2 @@
-web: pipenv run python run.py 0.0.0.0:$PORT
+web: pipenv run python run.py
 init: python db_create.py
