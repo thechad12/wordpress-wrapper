@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.config.from_object('config')
 login = LoginManager(app)
 login.login_view = 'login'
-app.config('MINIFY_PAGE') = True
+app.config['MINIFY_PAGE'] = True
 HTMLMIN(app)
 # Temporary database while app is in development/testing.
 # Switch to more secure database outside of app when in
