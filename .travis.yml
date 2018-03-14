@@ -1,9 +1,17 @@
 language: python
 python:
-- "2.7"
+- '2.7'
 install:
 - pip install pipenv
 - pipenv install --skip-lock
 script: pipenv run python test.py
 env:
 - FLASK_VERSION=0.10.1
+deploy:
+  provider: heroku
+  api_key:
+    secure: M5oZkNBD1RItYvuUg7UTxOIwybNqw9gIGcBOO27mWdNpeQEKo3PfTRKjWm3H2jskrHCw7Qja0MyWflGdftn0aNTOikwi0jgQxgu9FcPO+MYcBcSB0nkI4lSo7aTSfkl/3h4CbnKj/9SMIVo9kbNQouyWF2fN54VJkXDaJyHFg2gq2siI6lCIMTI9+xritXgeRA/WtaNPLSUFrSqz01Mm5W1/Q9r0kvtpDNmjgm8Ec2Wr5h9swIaqqsqd3uh+gEN+8eKrX7nfOPruemL3N7GBOW5lJMbfmSsPyfynCCGZ3KeDU/W6UnOX+bU9UkO58mjk5ffor3zhlqMPXwrl0/uUF9AMHF2O1lunyhilxZonEnf3nkYc3YNUd5YaTRkplEIbcUZWur6PWD87i/4UTUNmso4l9e0p5co4H9f1xmhG+J5EPtIbhbz7dgzLTjvrAgUofQWGhbRfuchmnCf9ZoL45Ck26K5E3dCbgr89cYvu00C2khBWOABjCplC67WfQw6xuMKpXp0O8agPv7N+fAwa0ALy5Z4ht5RVYETvbFNO3xJdV8Q5hqws8Xfm+ikX1kcvIpXh1BxZiaVI7zxoxsQF/sU1RNGL6MKkZi3QhK7x3LjXoVDSbHdtB3IU52PzbZoHHq0atTkMb1DvYy7db7NqWQtVFVOrp9pAoGdGP7WYNEM=
+  app: wordpress-wrapper
+  run:
+    - "cd app/static/js && npm install"
+    - "cd app/static/js && gulp heroku"
