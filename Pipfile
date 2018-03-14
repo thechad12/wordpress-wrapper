@@ -36,3 +36,4 @@ wtforms = "*"
 requests = "*"
 sqlalchemy-migrate = "*"
 flask-htmlmin = "*"
+raven = {extras = ["flask"]}
