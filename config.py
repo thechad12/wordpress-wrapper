@@ -1,9 +1,6 @@
 from app import *
-from raven.contrib.flask import Sentry
 import os
 app.secret_key = 'secret_key_will_be_set'
-
-sentry = Sentry(app, dsn='https://60bf204801414f0eacb8edfae91cf5a0:3464b879dc744a56bbc67f963e706384@sentry.io/304772')
 
 if not app.debug:
 	import logging
