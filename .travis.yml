@@ -3,7 +3,7 @@ python:
 - '2.7'
 install:
 - pip install pipenv
-- pipenv install --skip-lock
+- pipenv install
 script: pipenv run python test.py
 env:
 - FLASK_VERSION=0.10.1
