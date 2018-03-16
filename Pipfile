@@ -7,7 +7,7 @@ name = "pypi"
 
 [requires]
 
-python_full_version = "2.7.10"
+python_full_version = "2.7.14"
 
 
 [dev-packages]
