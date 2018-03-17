@@ -33,3 +33,5 @@ def load_user(user_id):
 	return db.session.query(User).filter_by(id=user_id).one()
 
 
+
+
