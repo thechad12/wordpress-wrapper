@@ -1,5 +1,6 @@
 from app import *
 import os
+import psycopg2
 app.secret_key = 'secret_key_will_be_set'
 
 if not app.debug:
@@ -16,6 +17,7 @@ if not app.debug:
 	except IOError:
 		pass
 
-SQLALCHEMY_DB_URI = 'sqlite:///users.db'
+SQLALCHEMY_DB_URI = os.environ['DATABASE_URL']
+conn = psycopg2.connect(SQLALCHEMY_DB_URI, sslmode='require')
 
 

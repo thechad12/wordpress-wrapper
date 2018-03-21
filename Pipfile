@@ -40,3 +40,5 @@ raven = {extras = ["flask"]}
 gunicorn = "*"
 flask-migrate = "*"
 flask-script = "*"
+parse = "*"
+"psycopg2-binary" = "*"
