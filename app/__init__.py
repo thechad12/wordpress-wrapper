@@ -5,6 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from flask_htmlmin import HTMLMIN
+import os
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -12,10 +13,12 @@ login = LoginManager(app)
 login.login_view = 'login'
 app.config['MINIFY_PAGE'] = True
 HTMLMIN(app)
-# Temporary database while app is in development/testing.
-# Switch to more secure database outside of app when in
-# production.
-db_uri = 'sqlite:///users.db'
+# Check if DB URL is configured (will be in heroku environment for psql)
+# if not, connect to local sqlite db in memory
+try:
+	db_uri = os.environ['DATABASE_URL']
+except KeyError:
+	db_uri = 'sqlite:///users.db'
 db = create_engine(db_uri)
 Base = declarative_base()
 DBSession = sessionmaker(bind=db)
