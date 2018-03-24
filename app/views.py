@@ -45,17 +45,16 @@ def check_url(url):
 def register():
 	if current_user.is_authenticated:
 		return redirect(url_for('index'))
-	csrf = gen_csrf_token()
 	form = RegistrationForm()
 	if form.validate_on_submit():
-		user = User(wp_username=form.wp_username.data, wp_url=check_url(form.wp_url.data),
+		user = User(wp_username=form.wp_username.data, wp_url=form.wp_url.data,
 			wp_password=form.wp_password.data)
 		dbsession.add(user)
 		dbsession.commit()
 		flash('You have now registered')
 		return redirect(url_for('login'))
-	return render_template('register.html',title='Register', form=form,
-		token=csrf)
+	print(form.errors)
+	return render_template('register.html',title='Register', form=form)
 
 
 # Login with wordpress
