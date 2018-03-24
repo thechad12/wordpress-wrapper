@@ -2,25 +2,25 @@
 {% block content %}
 
 <div class="registration-form">
-	<form action="{{ url_for('register', csrf_token=csrf) }}" method="post">
+	<form action="{{ url_for('register') }}" method="POST">
 		{{ form.hidden_tag() }}
 		<p>
 			{{ form.wp_username.label }}<br/>
-			{{ form.wp_username(size=32) }}<br/>
+			{{ form.wp_username(size=50) }}<br/>
 			{% for error in form.wp_username.errors %}
 				<span class="error">[{{ error }}]</span>
 			{% endfor %}
 		</p>
 		<p>
 			{{ form.wp_password.label }}<br/>
-			{{ form.wp_password(size=32) }}<br/>
+			{{ form.wp_password(size=50) }}<br/>
 			{% for error in form.wp_password.errors %}
 				<span class="error">[{{ error }}]</span>
 			{% endfor %}
 		</p>
 		<p>
 			{{ form.wp_url.label }}<br/>
-			{{ form.wp_url(size=32) }}<br/>
+			{{ form.wp_url(size=50) }}<br/>
 			{% for error in form.wp_url.errors %}
 				<span class="error">[{{ error }}]</span>
 			{% endfor %}
