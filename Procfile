@@ -1,2 +1,2 @@
 web: pipenv run python run.py
-init: python db_create.py
+init: pipenv run python db_create.py

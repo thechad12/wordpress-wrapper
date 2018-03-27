@@ -31,12 +31,20 @@ def not_found(error):
 def server_error(error):
 	return render_template('error/500.html'), 500
 
+# For client functions to work, wordpress
+# URL must point to /xmlrpc.php
+# function to check if that is in URL,
+# appends it if not
+def check_url(url):
+	if '/xmlrpc.php' not in url:
+		url += '/xmlrpc.php'
+	return url
+
 # Register and create new user
 @app.route('/register', methods=['GET', 'POST'])
 def register():
 	if current_user.is_authenticated:
 		return redirect(url_for('index'))
-	csrf = gen_csrf_token()
 	form = RegistrationForm()
 	if form.validate_on_submit():
 		user = User(wp_username=form.wp_username.data, wp_url=form.wp_url.data,
@@ -45,8 +53,8 @@ def register():
 		dbsession.commit()
 		flash('You have now registered')
 		return redirect(url_for('login'))
-	return render_template('register.html',title='Register', form=form,
-		token=csrf)
+	print(form.errors)
+	return render_template('register.html',title='Register', form=form)
 
 
 # Login with wordpress
