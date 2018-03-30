@@ -63,6 +63,8 @@ def wp_connect():
 	# Check that state token is the one created on the server
 	if request.args.get('state') != login_session['state']:
 		abort(403)
+	if current_user.is_authenticated:
+		return redirect(url_for('index'))
 	login_session['user'] = request.form['username']
 	login_session['password'] = request.form['password']
 	login_session['url'] = get_url(login_session['user'])

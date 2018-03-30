@@ -8,3 +8,9 @@ class RegistrationForm(FlaskForm):
 	wp_url = StringField('URL', validators=[DataRequired()])
 	wp_password = PasswordField('Password', validators=[DataRequired()])
 	submit = SubmitField('Register')
+
+class EditForm(FlaskForm):
+	wp_username = StringField('Username')
+	wp_url = StringField('URL')
+	wp_password = PasswordField('Password')
+	submit = SubmitField('Edit')

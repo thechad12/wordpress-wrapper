@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "58340de54751ce766317cdd82a5789bad181984f7dc8f217c60b301301347ff7"
+            "sha256": "2038d43d9e8d91915b87842852381b1b466003d2e4a6b8105ea1019ce3b1885c"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -90,6 +90,10 @@
             "hashes": [],
             "version": "==2.0.6"
         },
+        "flask-session": {
+            "hashes": [],
+            "version": "==0.3.1"
+        },
         "flask-sqlalchemy": {
             "hashes": [],
             "version": "==2.3.2"
@@ -108,7 +112,7 @@
         },
         "httplib2": {
             "hashes": [],
-            "version": "==0.11.0"
+            "version": "==0.11.3"
         },
         "idna": {
             "hashes": [],
@@ -160,7 +164,7 @@
         },
         "pbr": {
             "hashes": [],
-            "version": "==3.1.1"
+            "version": "==4.0.0"
         },
         "psycopg2-binary": {
             "hashes": [],
@@ -168,7 +172,7 @@
         },
         "python-dateutil": {
             "hashes": [],
-            "version": "==2.7.0"
+            "version": "==2.7.2"
         },
         "python-editor": {
             "hashes": [],
