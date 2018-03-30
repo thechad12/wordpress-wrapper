@@ -29,7 +29,7 @@ def login():
 		string.ascii_uppercase + string.digits)
 		for x in range(32))
 	login_session['state'] = state
-	return render_template('login.html', STATE=state)
+	return render_template('users/login.html', STATE=state)
 
 # Logout function
 @app.route('/logout/')
@@ -41,7 +41,7 @@ def logout():
 # Check if user is logged in
 def check_logged_in(session):
 	if 'user' not in session:
-		return render_template('index.html')
+		return render_template('common/index.html')
 
 # Generate csrf token for registration and
 # any other functions where it may be necessary

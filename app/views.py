@@ -21,7 +21,7 @@ from wordpress_xmlrpc.methods import posts
 @app.route('/')
 @app.route('/home')
 def index():
-	return render_template('index.html')
+	return render_template('common/index.html')
 
 @app.errorhandler(404)
 def not_found(error):
@@ -54,7 +54,7 @@ def register():
 		flash('You have now registered')
 		return redirect(url_for('login'))
 	print(form.errors)
-	return render_template('register.html',title='Register', form=form)
+	return render_template('users/register.html',title='Register', form=form)
 
 
 # Login with wordpress
@@ -80,7 +80,7 @@ def get_posts():
 	client = check_login(login_session['url'], login_session['user'],
 		login_session['password'])
 	wp_posts = client.call(posts.GetPosts())
-	return render_template('posts.html', wp_posts=wp_posts)
+	return render_template('posts/posts.html', wp_posts=wp_posts)
 
 # View specific post
 @app.route('/posts/<int:post_id>')
@@ -89,7 +89,7 @@ def view_post(post_id):
 	client = check_login(login_session['url'], login_session['user'],
 			login_session['password'])
 	wp_post = client.call(posts.GetPost(post_id))
-	return render_template('post.html', post=wp_post)
+	return render_template('posts/post.html', post=wp_post)
 
 # Create new post
 @app.route('/newpost', methods=['GET', 'POST'])
@@ -107,7 +107,7 @@ def new_post():
 		flash('New post successfully added')
 		return redirect(url_for('get_posts'))
 	else:
-		return render_template('newpost.html')
+		return render_template('posts/newpost.html')
 
 # Edit existing post
 @app.route('/posts/<int:wp_post_id>/edit', methods=['GET', 'POST'])
@@ -124,7 +124,7 @@ def edit_post(wp_post_id):
 		flash('Post edited successfully')
 		return redirect(url_for('get_posts'))
 	else:
-		return render_template('editpost.html', wp_post_id=wp_post_id)
+		return render_template('posts/editpost.html', wp_post_id=wp_post_id)
 
 # Delete an existing post
 @app.route('/posts/<int:wp_post_id>/delete', methods=['GET', 'POST'])
@@ -138,7 +138,7 @@ def delete_post(wp_post_id):
 		flash('Post deleted successfully')
 		return redirect(url_for('get_posts'))
 	else:
-		return render_template('deletepost.html', wp_post_id=wp_post_id, post=wp_post)
+		return render_template('posts/deletepost.html', wp_post_id=wp_post_id, post=wp_post)
 
 # Show list of wordpress pages
 @app.route('/pages/')
@@ -148,7 +148,7 @@ def get_pages():
 		login_session['password'])
 	wp_pages = client.call(posts.GetPosts({'post_type': 'page'},
 		results_class=WordPressPage))
-	return render_template('pages.html')
+	return render_template('posts/pages.html')
 
 # custom filtering functionality,
 # to be shown with AJAX request
@@ -166,7 +166,7 @@ def filter_posts():
 			'post_type': custom_filter}))
 		return filtered_posts
 	else:
-		return render_template('posts.html')
+		return render_template('posts/posts.html')
 
 # Custom ordering functionality,
 # to be shown with AJAX request
@@ -182,7 +182,7 @@ def order_posts():
 		ordered_posts = client.call(posts.GetPosts({'orderby': date, 'order': order}))
 		return ordered_posts
 	else:
-		return render_template('posts.html')
+		return render_template('posts/posts.html')
 
 
 

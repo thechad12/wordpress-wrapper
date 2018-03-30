@@ -13,7 +13,7 @@ from wordpress_xmlrpc import Client as wp
 @app.route('/users/<int:user_id>')
 def user_profile(user_id):
 	user = dbsession.query(User).filter_by(id=user_id).one()
-	return render_template('user.html')
+	return render_template('users/user.html')
 
 @app.route('users/<int:user_id>/edit')
 def edit_user(user_id):
@@ -30,9 +30,19 @@ def edit_user(user_id):
 		dbsession.commit()
 		flash('User info edited successfully')
 		return redirect(url_for('user_profile', user_id=user_id))
-	return render_template('editprofile.html')
+	return render_template('users/editprofile.html')
 
-
+@app.route('users/<int:user_id>/delete')
+def delete_user(user_id):
+	if 'user' not in login_session:
+		return redirect(url_for('index'))
+	user = dbsession.query(User).filter_by(id=user_id).one()
+	if request.method == 'POST':
+		dbsession.delete(user)
+		dbsession.commit()
+		flash('User deleted successfully')
+		return redirect(url_for('index'))
+	return render_template('users/deleteprofile.html')
 
 
 
