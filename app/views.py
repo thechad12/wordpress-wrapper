@@ -101,9 +101,8 @@ def new_post():
 		new_wp_post = WordPressPost()
 		new_wp_post.title = request.form['title']
 		new_wp_post.content = request.form['content']
-		new_wp_post.id = client.call(posts.NewPost(new_wp_post))
-		# Allow user to check post before publishing
 		new_wp_post.status = 'publish'
+		new_wp_post.id = client.call(posts.NewPost(new_wp_post))
 		flash('New post successfully added')
 		return redirect(url_for('get_posts'))
 	else:
@@ -120,6 +119,7 @@ def edit_post(wp_post_id):
 		edit_wp_post.title = request.form['title']
 		edit_wp_post.content = request.form['content']
 		edit_wp_post.id = wp_post_id
+		edit_wp_post.status = 'publish'
 		client.call(posts.EditPost(edit_wp_post.id, edit_wp_post))
 		flash('Post edited successfully')
 		return redirect(url_for('get_posts'))

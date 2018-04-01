@@ -19,7 +19,7 @@ def check_login(url, username, password):
 	return wp(user.wp_url, user.wp_username, user.wp_password)
 
 def get_url(username):
-	user = dbsession.query(User).filter_by(wp_username=username).one()
+	user = dbsession.query(User).filter_by(wp_username=username).first()
 	return user.wp_url
 
 # Create anti-forgery state token
