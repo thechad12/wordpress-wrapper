@@ -70,7 +70,7 @@ def wp_connect():
 	login_session['url'] = get_url(login_session['user'])
 	check_login(login_session['url'], login_session['user'],
 	login_session['password'])
-	current_user.is_authenticated = True
+	print(current_user.is_authenticated)
 	return redirect(url_for('get_posts'))
 
 

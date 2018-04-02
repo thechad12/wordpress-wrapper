@@ -5,6 +5,7 @@ from app import app, db, dbsession, login
 from models import User
 from flask import session as login_session
 from flask import render_template, url_for, redirect
+from flask_login import current_user
 import json
 import random
 import string
@@ -30,6 +31,8 @@ def get_url(username):
 # Create anti-forgery state token
 @app.route('/login')
 def login():
+	if current_user.is_authenticated:
+		return redirect(url_for('get_posts'))
 	state = ''.join(random.choice(
 		string.ascii_uppercase + string.digits)
 		for x in range(32))
