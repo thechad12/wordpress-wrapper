@@ -44,7 +44,7 @@ def check_url(url):
 @app.route('/register', methods=['GET', 'POST'])
 def register():
 	user = current_user
-	if user.check_authenticated():
+	if user.is_authenticated:
 		return redirect(url_for('index'))
 	form = RegistrationForm()
 	if form.validate_on_submit():
@@ -54,7 +54,6 @@ def register():
 		dbsession.commit()
 		flash('You have now registered')
 		return redirect(url_for('login'))
-	print(form.errors)
 	return render_template('users/register.html',title='Register', form=form)
 
 
@@ -65,15 +64,13 @@ def wp_connect():
 	if request.args.get('state') != login_session['state']:
 		abort(403)
 	user = current_user
-	if user.check_authenticated():
+	if user.is_authenticated:
 		return redirect(url_for('index'))
 	login_session['user'] = request.form['username']
 	login_session['password'] = request.form['password']
 	login_session['url'] = get_url(login_session['user'])
 	check_login(login_session['url'], login_session['user'],
 	login_session['password'])
-	user = User(login_session['user'], login_session['password'], login_session['url'],
-		authenticated=True)
 	dbsession.add(user)
 	dbsession.commit()
 	return redirect(url_for('get_posts'))
