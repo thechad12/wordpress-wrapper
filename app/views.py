@@ -43,7 +43,7 @@ def check_url(url):
 # Register and create new user
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-	if current_user.is_authenticated():
+	if current_user.is_authenticated:
 		return redirect(url_for('index'))
 	form = RegistrationForm()
 	if form.validate_on_submit():
@@ -70,6 +70,7 @@ def wp_connect():
 	login_session['url'] = get_url(login_session['user'])
 	check_login(login_session['url'], login_session['user'],
 	login_session['password'])
+	current_user.is_authenticated = True
 	return redirect(url_for('get_posts'))
 
 
