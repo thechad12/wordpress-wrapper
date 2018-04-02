@@ -44,7 +44,7 @@ def check_url(url):
 @app.route('/register', methods=['GET', 'POST'])
 def register():
 	user = current_user
-	if user.is_authenticated():
+	if user.check_authenticated():
 		return redirect(url_for('index'))
 	form = RegistrationForm()
 	if form.validate_on_submit():
@@ -65,7 +65,7 @@ def wp_connect():
 	if request.args.get('state') != login_session['state']:
 		abort(403)
 	user = current_user
-	if user.is_authenticated():
+	if user.check_authenticated():
 		return redirect(url_for('index'))
 	login_session['user'] = request.form['username']
 	login_session['password'] = request.form['password']
