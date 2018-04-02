@@ -81,6 +81,7 @@ def get_posts():
 	client = check_login(login_session['url'], login_session['user'],
 		login_session['password'])
 	wp_posts = client.call(posts.GetPosts())
+	print(current_user.is_authenticated)
 	return render_template('posts/posts.html', wp_posts=wp_posts)
 
 # View specific post
