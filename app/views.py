@@ -71,8 +71,6 @@ def wp_connect():
 	login_session['url'] = get_url(login_session['user'])
 	check_login(login_session['url'], login_session['user'],
 	login_session['password'])
-	dbsession.add(user)
-	dbsession.commit()
 	return redirect(url_for('get_posts'))
 
 
