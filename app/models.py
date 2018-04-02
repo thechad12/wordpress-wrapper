@@ -15,10 +15,7 @@ class User(UserMixin, Base):
 	wp_username = Column(String)
 	wp_password = Column(String)
 	wp_url = Column(String)
-
-	def authenticate(self, url, username, password):
-		wp_login = wp(url, username, password)
-		return wp_login
+	authenticated = Column(Boolean, default=False)
 
 	def set_password_hash(self, password):
 		self.password_hash = generate_password_hash(password)
@@ -26,11 +23,12 @@ class User(UserMixin, Base):
 	def check_password(self, password):
 		return check_password(self.password_hash, password)
 
+	@property
+	def is_authenticated(self):
+		return self.authenticated
 
-# Function to store login information in session
-@login.user_loader
-def load_user(user_id):
-	return dbsession.query(User).filter_by(id=user_id).one()
+
+
 
 
 

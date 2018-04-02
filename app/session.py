@@ -42,7 +42,11 @@ def login():
 # Logout function
 @app.route('/logout/')
 def logout():
+	user = current_user
 	logout_user()
+	user.authenticated = False
+	dbsession.add(user)
+	dbsession.commit()
 	flash("You have successfully been logged out")
 	return redirect(url_for('index'))
 

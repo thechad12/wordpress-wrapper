@@ -10,7 +10,7 @@ import os
 app = Flask(__name__)
 app.config.from_object('config')
 login = LoginManager(app)
-login.login_view = 'login'
+login.login_view = 'wp_connect'
 app.config['MINIFY_PAGE'] = True
 HTMLMIN(app)
 # Check if DB URL is configured (will be in heroku environment for psql)
