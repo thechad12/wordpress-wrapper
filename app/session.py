@@ -10,6 +10,11 @@ import random
 import string
 from wordpress_xmlrpc import Client as wp
 
+# Function to store login information in session
+@login.user_loader
+def load_user(user_id):
+	return dbsession.query(User).filter_by(id=user_id).one()
+
 # Login function
 def check_login(url, username, password):
 	user = User(wp_username=username, wp_password=password, wp_url=url)
