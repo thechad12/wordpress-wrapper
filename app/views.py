@@ -21,7 +21,7 @@ from wordpress_xmlrpc.methods import posts
 @app.route('/')
 @app.route('/home')
 def index():
-	return render_template('common/index.html')
+	return render_template('common/index.html', login_session=login_session)
 
 @app.errorhandler(404)
 def not_found(error):
