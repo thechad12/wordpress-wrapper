@@ -24,7 +24,7 @@ def edit_user(user_id):
 	if request.method == 'POST':
 		user.id = user_id
 		user.wp_username = form.wp_username.data
-		user.wp_password = form.wp_password.data
+		user.wp_password = user.set_password_hash(form.wp_password.data)
 		user.wp_url = form.wp_url.data
 		dbsession.add(user)
 		dbsession.commit()
