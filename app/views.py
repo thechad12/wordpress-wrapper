@@ -43,13 +43,14 @@ def check_url(url):
 # Register and create new user
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-	user = current_user
-	if user.is_authenticated:
+	if current_user.is_authenticated:
 		return redirect(url_for('index'))
 	form = RegistrationForm()
 	if form.validate_on_submit():
 		user = User(wp_username=form.wp_username.data, wp_url=form.wp_url.data,
 			wp_password=form.wp_password.data)
+		pass_hash = user.set_password_hash(user.wp_password)
+		user.wp_password = pass_hash
 		dbsession.add(user)
 		dbsession.commit()
 		flash('You have now registered')
@@ -63,8 +64,7 @@ def wp_connect():
 	# Check that state token is the one created on the server
 	if request.args.get('state') != login_session['state']:
 		abort(403)
-	user = current_user
-	if user.is_authenticated:
+	if current_user.is_authenticated:
 		return redirect(url_for('index'))
 	login_session['user'] = request.form['username']
 	login_session['password'] = request.form['password']
