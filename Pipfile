@@ -5,6 +5,11 @@ verify_ssl = true
 name = "pypi"
 
 
+[requires]
+
+python_full_version = "2.7.14"
+
+
 [dev-packages]
 
 
@@ -24,4 +29,11 @@ python-wordpress = "*"
 requests-oauthlib = "*"
 wordpress-json = "*"
 logging = "*"
+flask-login = "*"
+werkzeug = "*"
+flask-wtf = "*"
+wtforms = "*"
 requests = "*"
+sqlalchemy-migrate = "*"
+flask-htmlmin = "*"
+raven = {extras = ["flask"]}

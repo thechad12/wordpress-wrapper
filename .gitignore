@@ -1,5 +1,6 @@
 *.pyc
-*.lock
 *.log
+*.db
 __pycache__/
 *.txt
+node_modules/
