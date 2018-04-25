@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileRequired
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from app.models import User
@@ -14,3 +15,7 @@ class EditForm(FlaskForm):
 	wp_url = StringField('URL')
 	wp_password = PasswordField('Password')
 	submit = SubmitField('Edit')
+
+class ImageUpload(FlaskForm):
+	image = FileField('Image', validators=[FileRequired()])
+	upload = SubmitField('Upload')

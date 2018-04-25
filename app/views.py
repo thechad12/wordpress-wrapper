@@ -15,12 +15,16 @@ import string
 import wordpress_xmlrpc
 from wordpress_xmlrpc import Client as wp
 from wordpress_xmlrpc import WordPressPost, WordPressPage
-from wordpress_xmlrpc.methods import posts
+from wordpress_xmlrpc.methods import posts, media
+from wordpress_xmlrpc.compat import xmlrpc_client
+from werkzeug.utils import secure_filename
 
 
 @app.route('/')
 @app.route('/home')
 def index():
+	if 'user' in login_session:
+		print(user.id)
 	return render_template('common/index.html', login_session=login_session)
 
 @app.errorhandler(404)
@@ -151,6 +155,26 @@ def get_pages():
 	wp_pages = client.call(posts.GetPosts({'post_type': 'page'},
 		results_class=WordPressPage))
 	return render_template('posts/pages.html')
+
+# Upload image to directory
+@app.route('/upload')
+def upload_image():
+	client = check_login(login_session['url'], login_session['user'],
+		login_session['password'])
+	form = ImageUpload()
+	if form.validate_on_submit():
+		image_data = form.image.data
+		filename = secure_filename(image_data.filename)
+		wp_image_data = {
+			'name': filename,
+			'type': 'image/jpeg'
+		}
+		with open(filename, 'rb') as img:
+			data['bits'] = xmlrpc_client.Binary(img.read())
+		res = client.call(media.UploadFile(data))
+		return redirect(url_for('get_posts'))
+	return render_template('templates/files/upload.html')
+
 
 # custom filtering functionality,
 # to be shown with AJAX request
