@@ -17,13 +17,14 @@ class User(UserMixin, Base):
 	wp_url = Column(String)
 
 	def set_password_hash(self, password):
-		self.password_hash = generate_password_hash(password)
+		self.wp_password = generate_password_hash(password)
+		return self.wp_password
 
 	def check_password(self, password):
-		return check_password_hash(self.password_hash, password)
+		return check_password_hash(self.wp_password, password)
 
 	def __repr__(self):
-		return '<User {}>'.format(self.wp_username)
+		return '<User {}/><Password {}/>'.format(self.wp_username, self.wp_password)
 
 
 

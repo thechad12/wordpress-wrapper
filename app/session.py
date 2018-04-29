@@ -10,6 +10,7 @@ import json
 import random
 import string
 from wordpress_xmlrpc import Client as wp
+from wekzeug.security import check_password_hash
 
 # Function to store login information in session
 @login.user_loader
@@ -18,12 +19,13 @@ def load_user(user_id):
 
 # Login function
 def check_login(url, username, password):
-	user = User(wp_username=username, wp_password=password, wp_url=url)
-	if not user.check_password(user.wp_password):
-		return render_template('error/loginerror.html')
-	login_session['user'] = user.wp_username
-	login_session['password'] = user.wp_password
-	login_session['url'] = user.wp_url
+	user = dbsession.query(User).filter_by(wp_username=username).one()
+	if not check_password_hash(user.wp_password, password):
+		return render_template('error/401.html')
+	else:
+		login_session['user'] = user.wp_username
+		login_session['password'] = user.wp_password
+		login_session['url'] = user.wp_url
 	return wp(user.wp_url, user.wp_username, user.wp_password)
 
 def get_url(username):

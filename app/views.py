@@ -18,6 +18,7 @@ from wordpress_xmlrpc import WordPressPost, WordPressPage
 from wordpress_xmlrpc.methods import posts, media
 from wordpress_xmlrpc.compat import xmlrpc_client
 from werkzeug.utils import secure_filename
+from wekzeug.security import generate_password_hash
 
 
 @app.route('/')
@@ -52,9 +53,7 @@ def register():
 	form = RegistrationForm()
 	if form.validate_on_submit():
 		user = User(wp_username=form.wp_username.data, wp_url=form.wp_url.data,
-			wp_password=form.wp_password.data)
-		pass_hash = user.set_password_hash(user.wp_password)
-		user.wp_password = pass_hash
+			wp_password=generate_password_hash(form.wp_password.data))
 		dbsession.add(user)
 		dbsession.commit()
 		flash('You have now registered')
