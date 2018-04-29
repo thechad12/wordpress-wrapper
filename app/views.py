@@ -18,7 +18,7 @@ from wordpress_xmlrpc import WordPressPost, WordPressPage
 from wordpress_xmlrpc.methods import posts, media
 from wordpress_xmlrpc.compat import xmlrpc_client
 from werkzeug.utils import secure_filename
-from wekzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash
 
 
 @app.route('/')

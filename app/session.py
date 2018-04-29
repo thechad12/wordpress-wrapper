@@ -10,7 +10,7 @@ import json
 import random
 import string
 from wordpress_xmlrpc import Client as wp
-from wekzeug.security import check_password_hash
+from werkzeug.security import check_password_hash
 
 # Function to store login information in session
 @login.user_loader
