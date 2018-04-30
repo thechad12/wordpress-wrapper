@@ -26,7 +26,7 @@ def check_login(url, username, password):
 		login_session['user'] = user.wp_username
 		login_session['password'] = user.wp_password
 		login_session['url'] = user.wp_url
-	return wp(user.wp_url, user.wp_username, user.wp_password)
+		return wp(user.wp_url, user.wp_username, user.wp_password)
 
 def get_url(username):
 	user = dbsession.query(User).filter_by(wp_username=username).first()
