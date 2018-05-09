@@ -16,21 +16,18 @@ class User(UserMixin, Base):
 	wp_password = Column(String)
 	wp_url = Column(String)
 
-	def authenticate(self, url, username, password):
-		wp_login = wp(url, username, password)
-		return wp_login
-
 	def set_password_hash(self, password):
-		self.password_hash = generate_password_hash(password)
+		self.wp_password = generate_password_hash(password)
+		return self.wp_password
 
 	def check_password(self, password):
-		return check_password(self.password_hash, password)
+		return check_password_hash(self.wp_password, password)
+
+	def __repr__(self):
+		return '<User {}/><Password {}/>'.format(self.wp_username, self.wp_password)
 
 
-# Function to store login information in session
-@login.user_loader
-def load_user(user_id):
-	return dbsession.query(User).filter_by(id=user_id).one()
+
 
 
 

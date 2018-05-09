@@ -1,0 +1,12 @@
+{% extends "main.html" %}
+{% block content %}
+
+<div class="user">
+	<div class="username">{{ user.wp_username }}</div>
+	<div class="url">{{ user.wp_url }}</div>
+	<form action="{{ url_for('delete_user', user_id=user.id) }}" method="post">
+		<button type="submit"><input type="submit" name="delete"></button>
+	</form>
+</div>
+
+{% endblock %}
