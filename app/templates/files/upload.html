@@ -1,0 +1,19 @@
+{% extends "main.html" %}
+{% block content %}
+
+<div class="image-upload">
+	<form action="{{ url_for('upload_image') }}" method="post">
+		{{ form.hidden_tag() }}
+		<p>
+			{{ form.image.label }}
+			{{ form.image(size=30) }}
+			{% for error in form.image.errors %}
+				<span class="error">[{{ error }}]</span>
+			{% endfor %}
+		</p>
+	</form>
+</div>
+
+
+
+{% endblock %}
