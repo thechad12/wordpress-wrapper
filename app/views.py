@@ -4,7 +4,7 @@ operations of the app and their respective routes'''
 from app import app, db, dbsession, login
 from models import User
 from session import *
-from forms import RegistrationForm
+from forms import RegistrationForm, ImageUpload
 from flask import render_template, jsonify, redirect, url_for,\
 request, make_response, flash, abort
 from flask import session as login_session
@@ -24,8 +24,6 @@ from werkzeug.security import generate_password_hash
 @app.route('/')
 @app.route('/home')
 def index():
-	if 'user' in login_session:
-		print(user.id)
 	return render_template('common/index.html', login_session=login_session)
 
 @app.errorhandler(404)
@@ -156,23 +154,26 @@ def get_pages():
 	return render_template('posts/pages.html')
 
 # Upload image to directory
-@app.route('/upload')
+@app.route('/upload', methods=['GET', 'POST'])
 def upload_image():
 	client = check_login(login_session['url'], login_session['user'],
 		login_session['password'])
 	form = ImageUpload()
-	if form.validate_on_submit():
+	if form.validate_on_submit:
 		image_data = form.image.data
-		filename = secure_filename(image_data.filename)
+		#filename = secure_filename(image_data.filename)
 		wp_image_data = {
-			'name': filename,
+			'name': 'image',
 			'type': 'image/jpeg'
 		}
-		with open(filename, 'rb') as img:
-			data['bits'] = xmlrpc_client.Binary(img.read())
+		data['bits'] = xmlrpc_client.Binary(image_data.read())
 		res = client.call(media.UploadFile(data))
-		return redirect(url_for('get_posts'))
-	return render_template('templates/files/upload.html')
+		return res
+	else:
+		print(form.image.data)
+		print(form.errors)
+		#return redirect(url_for('get_posts'))
+	return render_template('files/upload.html', form=form)
 
 
 # custom filtering functionality,

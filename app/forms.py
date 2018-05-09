@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileField, FileRequired
+from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from app.models import User
@@ -17,5 +17,7 @@ class EditForm(FlaskForm):
 	submit = SubmitField('Edit')
 
 class ImageUpload(FlaskForm):
-	image = FileField('Image', validators=[FileRequired()])
-	upload = SubmitField('Upload')
+	image = FileField('Image', validators=[FileRequired(),
+		FileAllowed(['jpg', 'png', 'gif']),
+		'Images Only'])
+	submit = SubmitField('Upload')

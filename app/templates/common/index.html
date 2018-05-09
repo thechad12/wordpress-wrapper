@@ -3,11 +3,6 @@
 <body>
 
 <div class="header-menu">
-	{% if 'user' in login_session %}
-	<div class="edit-user">
-		<a href="{{ url_for('user_profile', user_id=user.id) }}">
-		View Profile</a>
-	{% endif %}
 	<div class="login">
 		<a href="{{ url_for('login', state=STATE) }}">Login</a>
 	</div>

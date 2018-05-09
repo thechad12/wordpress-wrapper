@@ -26,6 +26,10 @@ DBSession = sessionmaker(bind=db)
 dbsession = DBSession()
 migrate = Migrate(app, db)
 
+'''directory = '/app/static/userimg/'
+if not os.path.exists(directory):
+	os.makedirs(directory, 0777)
+app.config['UPLOAD_FOLDER'] = directory'''
 
 from app import views, models, session
 from models import User
