@@ -2,7 +2,7 @@
 management.'''
 
 from app import app, db, dbsession, login
-from models import User
+from app.models import User
 from flask import session as login_session
 from flask import render_template, url_for, redirect
 from flask_login import current_user

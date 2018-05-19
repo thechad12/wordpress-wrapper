@@ -1,45 +1,35 @@
 [[source]]
-
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
-
 [requires]
-
-python_full_version = "2.7.14"
-
+python_full_version = "3.6.5"
 
 [dev-packages]
 
-
-
 [packages]
-
 requirements = "*"
-flask = "*"
+flask = "==0.12.2"
 sqlalchemy = "*"
 "httplib2" = "*"
 wordpress-api = "*"
 python-wordpress-xmlrpc = "*"
 passlib = "*"
 "unittest2" = "*"
-colorama = "*"
 python-wordpress = "*"
 requests-oauthlib = "*"
 wordpress-json = "*"
-logging = "*"
-flask-login = "*"
+flask-login = "==0.4.1"
 werkzeug = "*"
-flask-wtf = "*"
 wtforms = "*"
 requests = "*"
 sqlalchemy-migrate = "*"
-flask-htmlmin = "*"
 raven = {extras = ["flask"]}
 gunicorn = "*"
-flask-migrate = "*"
-flask-script = "*"
 parse = "*"
 "psycopg2-binary" = "*"
+flask-wtf = "*"
 
+[pipenv]
+allow_prereleases = true

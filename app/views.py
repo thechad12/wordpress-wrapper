@@ -2,9 +2,10 @@
 operations of the app and their respective routes'''
 
 from app import app, db, dbsession, login
-from models import User
-from session import *
-from forms import RegistrationForm
+from app.models import User
+from app.session import *
+from app.profile import *
+from app.forms import RegistrationForm
 from flask import render_template, jsonify, redirect, url_for,\
 request, make_response, flash, abort
 from flask import session as login_session
@@ -24,9 +25,13 @@ from werkzeug.security import generate_password_hash
 @app.route('/')
 @app.route('/home')
 def index():
-	if 'user' in login_session:
-		print(user.id)
-	return render_template('common/index.html', login_session=login_session)
+	if login_session['user'] is not None:
+		user = dbsession.query(User).filter_by(wp_username=login_session['user']).one()
+	else:
+		user = None
+	print(user.id)
+	return render_template('common/index.html', login_session=login_session,
+		user=user)
 
 @app.errorhandler(404)
 def not_found(error):
