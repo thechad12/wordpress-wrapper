@@ -13,7 +13,7 @@ from wordpress_xmlrpc import Client as wp
 @app.route('/users/<int:user_id>')
 def user_profile(user_id):
 	user = dbsession.query(User).filter_by(id=user_id).one()
-	return render_template('users/user.html')
+	return render_template('users/user.html', user=user)
 
 @app.route('/users/<int:user_id>/edit')
 def edit_user(user_id):
