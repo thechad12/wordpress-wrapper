@@ -8,6 +8,9 @@
 		<a href="{{ url_for('user_profile', user_id=user.id) }}">
 		View Profile</a>
 	</div>
+	<div class="logout-user">
+		<a href="{{ url_for('logout') }}">Logout</a>
+	</div>
 	{% else %}
 	<div class="login">
 		<a href="{{ url_for('login', state=STATE) }}">Login</a>

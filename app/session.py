@@ -3,9 +3,10 @@ management.'''
 
 from app import app, db, dbsession, login
 from app.models import User
+from app.forms import LoginForm
 from flask import session as login_session
-from flask import render_template, url_for, redirect
-from flask_login import current_user
+from flask import render_template, url_for, redirect, flash
+from flask_login import current_user, logout_user, login_user
 import json
 import random
 import string
@@ -37,11 +38,21 @@ def get_url(username):
 def login():
 	if current_user.is_authenticated:
 		return redirect(url_for('get_posts'))
-	state = ''.join(random.choice(
+	'''state = ''.join(random.choice(
 		string.ascii_uppercase + string.digits)
 		for x in range(32))
 	login_session['state'] = state
-	return render_template('users/login.html', STATE=state)
+	return render_template('users/login.html', STATE=state)'''
+	form = LoginForm()
+	if form.validate_on_submit:
+		user = dbsession.query(User).filter_by(wp_username=form.wp_username.data).one()
+		if user is None or not user.check_password_hash(form.wp_password.data):
+			flash('Invalid login')
+			return redirect(url_for('login'))
+		login_user(user, remember=form.remember_me.data)
+		return redirect(url_for('get_posts'))
+	return render_template('login.html', title='Log In', form=form)
+
 
 # Logout function
 @app.route('/logout/')

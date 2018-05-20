@@ -4,6 +4,7 @@ from app.session import *
 from app import app, db, dbsession, login
 from app.models import User
 from app.forms import EditForm
+from app.session import logout
 from flask import session as login_session
 from flask import render_template, url_for, redirect, request, flash
 from flask_session import Session
@@ -40,6 +41,8 @@ def delete_user(user_id):
 	if request.method == 'POST':
 		dbsession.delete(user)
 		dbsession.commit()
+		# Does this make sense?
+		logout(user.id)
 		flash('User deleted successfully')
 		return redirect(url_for('index'))
 	return render_template('users/deleteprofile.html')
