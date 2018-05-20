@@ -30,6 +30,7 @@ gunicorn = "*"
 parse = "*"
 "psycopg2-binary" = "*"
 flask-wtf = "*"
+flask-session = "*"
 
 [pipenv]
 allow_prereleases = true

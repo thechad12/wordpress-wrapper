@@ -24,6 +24,6 @@ dbsession = DBSession()
 
 
 from app import views, models, session
-from models import User
-from session import *
+from app.models import User
+from app.session import *
 
