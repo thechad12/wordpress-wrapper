@@ -3,9 +3,9 @@
 <body>
 
 <div class="header-menu">
-	{% if user != None %}
+	{% if not current_user.is_anonymous %}
 	<div class="edit-user">
-		<a href="{{ url_for('user_profile', user_id=user.id) }}">
+		<a href="{{ url_for('user_profile', user_id=current_user.id) }}">
 		View Profile</a>
 	</div>
 	<div class="logout-user">
