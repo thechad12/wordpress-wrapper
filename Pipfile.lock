@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "015e41f828b0ffb48bbdb68d0a61474c1f6dc56e35d49a7695fb197c95fd5ebb"
+            "sha256": "fdc308234d6bdf8c9e15fc28a1b715d640731cc1bb6f48e710d31611cb40e569"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -179,10 +179,10 @@
         },
         "oauthlib": {
             "hashes": [
-                "sha256:09d438bcac8f004ae348e721e9d8a7792a9e23cd574634e973173344046287f5",
-                "sha256:909665297635fa11fe9914c146d875f2ed41c8c2d78e21a529dd71c0ba756508"
+                "sha256:ac35665a61c1685c56336bda97d5eefa246f1202618a1d6f34fccb1bdd404162",
+                "sha256:d883b36b21a6ad813953803edfa563b1b579d79ca758fe950d1bc9e8b326025b"
             ],
-            "version": "==2.0.7"
+            "version": "==2.1.0"
         },
         "ordereddict": {
             "hashes": [
@@ -245,6 +245,12 @@
             "index": "pypi",
             "version": "==2.7.4"
         },
+        "pycrypto": {
+            "hashes": [
+                "sha256:f2ce1e989b272cfcb677616763e0a2e7ec659effa67a88aa92b3a65528f60a3c"
+            ],
+            "version": "==2.6.1"
+        },
         "python-wordpress": {
             "hashes": [
                 "sha256:feb305a7f3697af4fc558be5787c429db23f1e6fd43d8a17caf4ba6d60ac508c"
@@ -289,6 +295,13 @@
             ],
             "index": "pypi",
             "version": "==0.1"
+        },
+        "simple-crypt": {
+            "hashes": [
+                "sha256:49462ab7ea4b080a8c10e362abfe35ecfa6dbe1e1c454ea36de7d2a71dce992f"
+            ],
+            "index": "pypi",
+            "version": "==4.1.7"
         },
         "six": {
             "hashes": [
