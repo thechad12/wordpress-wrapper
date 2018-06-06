@@ -1,11 +1,23 @@
 {% extends "main.html" %}
 {% block content %}
 <div class="wp-login-form">
-	<form action="{{ url_for('wp_connect', state=STATE) }}" method="POST">
-		<input type="text" size="30" name="username">
-		<input type="password" size="30" name="password" xhtml="password">
-		<button type="submit"><input type="submit" name="login">
-		Login</button>
+	<form action="{{ url_for('login', state=STATE) }}" method="POST">
+		{{ form.hidden_tag() }}
+		<p>
+			{{ form.wp_username.label }}
+			{{ form.wp_username(size=50) }}
+			{% for error in form.wp_username.errors %}
+				<span class="error">[{{error}}]</span>
+			{% endfor %}
+		</p>
+		<p>
+			{{ form.wp_password.label }}
+			{{ form.wp_password(size=50) }}
+			{% for error in form.wp_password.errors %}
+				<span class="error">[{{error}}]</span>
+			{% endfor %}
+		</p>
+		<p>{{ form.login() }}</p>
 	</form>
 </div>
 

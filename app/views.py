@@ -2,9 +2,10 @@
 operations of the app and their respective routes'''
 
 from app import app, db, dbsession, login
-from models import User
-from session import *
-from forms import RegistrationForm
+from app.models import User
+from app.session import *
+from app.profile import *
+from app.forms import RegistrationForm
 from flask import render_template, jsonify, redirect, url_for,\
 request, make_response, flash, abort
 from flask import session as login_session
@@ -24,9 +25,8 @@ from werkzeug.security import generate_password_hash
 @app.route('/')
 @app.route('/home')
 def index():
-	if 'user' in login_session:
-		print(user.id)
-	return render_template('common/index.html', login_session=login_session)
+	return render_template('common/index.html', login_session=login_session,
+		current_user=current_user)
 
 @app.errorhandler(404)
 def not_found(error):
@@ -80,11 +80,12 @@ def wp_connect():
 # Query posts of user
 @app.route('/posts/')
 def get_posts():
-	check_logged_in(login_session)
-	client = check_login(login_session['url'], login_session['user'],
-		login_session['password'])
+	user = current_user
+	print(user)
+	client = check_login(user.wp_url, user.wp_username,
+		user.wp_password)
+	print(client)
 	wp_posts = client.call(posts.GetPosts())
-	print(current_user.is_authenticated)
 	return render_template('posts/posts.html', wp_posts=wp_posts)
 
 # View specific post
