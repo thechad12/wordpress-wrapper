@@ -3,16 +3,21 @@
 <body>
 
 <div class="header-menu">
-	{% if 'user' in login_session %}
+	{% if not current_user.is_anonymous %}
 	<div class="edit-user">
-		<a href="{{ url_for('user_profile', user_id=user.id) }}">
+		<a href="{{ url_for('user_profile', user_id=current_user.id) }}">
 		View Profile</a>
-	{% endif %}
+	</div>
+	<div class="logout-user">
+		<a href="{{ url_for('logout') }}">Logout</a>
+	</div>
+	{% else %}
 	<div class="login">
 		<a href="{{ url_for('login', state=STATE) }}">Login</a>
 	</div>
 	<div class="register">
 		<a href="{{ url_for('register', token=token) }}">Register</a>
 	</div>
+	{% endif %}
 </div>
 {% endblock %}

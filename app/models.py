@@ -24,7 +24,10 @@ class User(UserMixin, Base):
 		return check_password_hash(self.wp_password, password)
 
 	def __repr__(self):
-		return '<User {}/><Password {}/>'.format(self.wp_username, self.wp_password)
+		return '<User {}/><Password {}/><URL {}'.format(self.wp_username,
+			self.wp_password, self.wp_url)
+
+
 
 
 
