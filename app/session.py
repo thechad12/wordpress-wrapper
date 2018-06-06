@@ -48,7 +48,8 @@ def login():
 			flash('Invalid login')
 			return redirect(url_for('login'))
 		login_user(user, remember=form.remember_me.data)
-		check_login(user.wp_url, user.wp_username, user.wp_password)
+		check_login(user.wp_url, user.wp_username, user.decrypt(enc_password,
+			enc_password))
 		return redirect(url_for('get_posts'))
 	return render_template('users/login.html', title='Log In', form=form)
 
