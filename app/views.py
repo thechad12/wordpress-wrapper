@@ -81,10 +81,8 @@ def wp_connect():
 @app.route('/posts/')
 def get_posts():
 	user = current_user
-	print(user)
 	client = check_login(user.wp_url, user.wp_username,
 		user.wp_password)
-	print(client)
 	wp_posts = client.call(posts.GetPosts())
 	return render_template('posts/posts.html', wp_posts=wp_posts)
 
