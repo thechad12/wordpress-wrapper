@@ -26,8 +26,7 @@ from simplecrypt import encrypt, decrypt
 @app.route('/')
 @app.route('/home')
 def index():
-	return render_template('common/index.html', login_session=login_session,
-		current_user=current_user)
+ 	return render_template('common/index.html',login_session=login_session,current_user=current_user)
 
 @app.errorhandler(404)
 def not_found(error):
@@ -84,7 +83,7 @@ def wp_connect():
 def get_posts():
 	user = current_user
 	client = check_login(user.wp_url, user.wp_username,
-		user.wp_password)
+		decrypt(user.enc_password, user.enc_password))
 	wp_posts = client.call(posts.GetPosts())
 	return render_template('posts/posts.html', wp_posts=wp_posts)
 

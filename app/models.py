@@ -25,11 +25,11 @@ class User(UserMixin, Base):
 	def check_password(self, password):
 		return check_password_hash(self.wp_password, password)
 
-	def set_encrypted_password(self, password):
-		self.enc_password = encrypt(password, password)
+	def set_encrypted_password(self, password, key):
+		self.enc_password = encrypt(key, password)
 
-	def get_encrypted_password(self, password):
-		return decrypt(password, password)
+	def get_encrypted_password(self, password, key):
+		return decrypt(key, password)
 
 	def __repr__(self):
 		return '<User {}/><Password {}/><URL {}'.format(self.wp_username,

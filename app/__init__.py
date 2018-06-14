@@ -5,6 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -21,6 +22,7 @@ db = create_engine(db_uri)
 Base = declarative_base()
 DBSession = sessionmaker(bind=db)
 dbsession = DBSession()
+migrate = Migrate(app, db)
 
 
 from app import views, models, session

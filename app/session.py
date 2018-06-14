@@ -16,7 +16,7 @@ from werkzeug.security import check_password_hash
 # Function to store login information in session
 @login.user_loader
 def load_user(user_id):
-	return dbsession.query(User).filter_by(id=user_id).one()
+	return dbsession.query(User).filter_by(id=user_id).first()
 
 # Login function
 def check_login(url, username, password):
@@ -48,8 +48,9 @@ def login():
 			flash('Invalid login')
 			return redirect(url_for('login'))
 		login_user(user, remember=form.remember_me.data)
-		check_login(user.wp_url, user.wp_username, user.decrypt(enc_password,
+		check_login(user.wp_url, user.wp_username, user.decrypt(form.wp_password.data,
 			enc_password))
+		login_session['logged_in'] = True
 		return redirect(url_for('get_posts'))
 	return render_template('users/login.html', title='Log In', form=form)
 
@@ -59,6 +60,7 @@ def login():
 def logout():
 	user = current_user
 	logout_user()
+	login_session['logged_in'] = False
 	flash("You have successfully been logged out")
 	return redirect(url_for('index'))
 
