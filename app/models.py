@@ -16,7 +16,6 @@ class User(UserMixin, Base):
 	wp_username = Column(String)
 	wp_password = Column(String)
 	wp_url = Column(String)
-	enc_password = Column(String)
 
 	def set_password_hash(self, password):
 		self.wp_password = generate_password_hash(password)

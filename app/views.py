@@ -53,8 +53,7 @@ def register():
 	form = RegistrationForm()
 	if form.validate_on_submit():
 		user = User(wp_username=form.wp_username.data, wp_url=form.wp_url.data,
-			wp_password=generate_password_hash(form.wp_password.data),
-			enc_password=encrypt(form.wp_password.data, form.wp_password.data))
+			wp_password=generate_password_hash(form.wp_password.data))
 		dbsession.add(user)
 		dbsession.commit()
 		flash('You have now registered')
@@ -83,7 +82,7 @@ def wp_connect():
 def get_posts():
 	user = current_user
 	client = check_login(user.wp_url, user.wp_username,
-		decrypt(user.enc_password, user.enc_password))
+		login_session['pw'])
 	wp_posts = client.call(posts.GetPosts())
 	return render_template('posts/posts.html', wp_posts=wp_posts)
 
