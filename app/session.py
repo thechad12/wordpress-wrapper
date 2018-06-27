@@ -12,11 +12,12 @@ import random
 import string
 from wordpress_xmlrpc import Client as wp
 from werkzeug.security import check_password_hash
+from simplecrypt import encrypt, decrypt
 
 # Function to store login information in session
 @login.user_loader
 def load_user(user_id):
-	return dbsession.query(User).filter_by(id=user_id).one()
+	return dbsession.query(User).filter_by(id=user_id).first()
 
 # Login function
 def check_login(url, username, password):
@@ -33,22 +34,20 @@ def get_url(username):
 # Create anti-forgery state token
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-	if current_user.is_authenticated:
-		return redirect(url_for('get_posts'))
-	'''state = ''.join(random.choice(
-		string.ascii_uppercase + string.digits)
-		for x in range(32))
-	login_session['state'] = state
-	return render_template('users/login.html', STATE=state)'''
+	#if login_session['logged_in'] is not None and login_session['logged_in'] == True:
+	#	return redirect(url_for('get_posts'))
+	print(current_user.is_authenticated)
 	form = LoginForm()
 	print(form.validate_on_submit)
 	if form.validate_on_submit():
-		user = dbsession.query(User).filter_by(wp_username=form.wp_username.data).one()
+		user = dbsession.query(User).filter_by(wp_username=form.wp_username.data).first()
 		if user is None or not user.check_password(form.wp_password.data):
 			flash('Invalid login')
 			return redirect(url_for('login'))
 		login_user(user, remember=form.remember_me.data)
-		check_login(user.wp_url, user.wp_username, user.wp_password)
+		check_login(user.wp_url, user.wp_username, form.wp_password.data)
+		login_session['logged_in'] = True
+		login_session['pw'] = form.wp_password.data
 		return redirect(url_for('get_posts'))
 	return render_template('users/login.html', title='Log In', form=form)
 
@@ -58,6 +57,7 @@ def login():
 def logout():
 	user = current_user
 	logout_user()
+	login_session['logged_in'] = False
 	flash("You have successfully been logged out")
 	return redirect(url_for('index'))
 
