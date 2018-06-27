@@ -40,7 +40,7 @@ def login():
 	form = LoginForm()
 	print(form.validate_on_submit)
 	if form.validate_on_submit():
-		user = dbsession.query(User).filter_by(wp_username=form.wp_username.data).one()
+		user = dbsession.query(User).filter_by(wp_username=form.wp_username.data).first()
 		if user is None or not user.check_password(form.wp_password.data):
 			flash('Invalid login')
 			return redirect(url_for('login'))
