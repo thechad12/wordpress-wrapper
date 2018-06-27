@@ -20,13 +20,13 @@ from wordpress_xmlrpc.methods import posts, media
 from wordpress_xmlrpc.compat import xmlrpc_client
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash
+from simplecrypt import encrypt, decrypt
 
 
 @app.route('/')
 @app.route('/home')
 def index():
-	return render_template('common/index.html', login_session=login_session,
-		current_user=current_user)
+ 	return render_template('common/index.html',login_session=login_session,current_user=current_user)
 
 @app.errorhandler(404)
 def not_found(error):
@@ -81,10 +81,8 @@ def wp_connect():
 @app.route('/posts/')
 def get_posts():
 	user = current_user
-	print(user)
 	client = check_login(user.wp_url, user.wp_username,
-		user.wp_password)
-	print(client)
+		login_session['pw'])
 	wp_posts = client.call(posts.GetPosts())
 	return render_template('posts/posts.html', wp_posts=wp_posts)
 
