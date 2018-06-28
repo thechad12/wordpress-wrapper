@@ -48,6 +48,7 @@ def login():
 		check_login(user.wp_url, user.wp_username, form.wp_password.data)
 		login_session['logged_in'] = True
 		login_session['pw'] = form.wp_password.data
+		print(user)
 		return redirect(url_for('get_posts'))
 	return render_template('users/login.html', title='Log In', form=form)
 
