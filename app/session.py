@@ -2,7 +2,7 @@
 management.'''
 
 from app import app, db, dbsession, login
-from app.models import User
+from app.models import User, SpecialTransport
 from app.forms import LoginForm
 from flask import session as login_session
 from flask import render_template, url_for, redirect, flash
@@ -13,6 +13,7 @@ import string
 from wordpress_xmlrpc import Client as wp
 from werkzeug.security import check_password_hash
 from simplecrypt import encrypt, decrypt
+from xmlrpc.client import Transport
 
 # Function to store login information in session
 @login.user_loader
@@ -25,7 +26,10 @@ def check_login(url, username, password):
 	if not check_password_hash(user.wp_password, password):
 		return render_template('error/401.html')
 	else:
-		return wp(url, username, password)
+		try:
+			return wp(url, username, password)
+		except:
+			return wp(url,username,password,transport=SpecialTransport())
 
 def get_url(username):
 	user = dbsession.query(User).filter_by(wp_username=username).first()

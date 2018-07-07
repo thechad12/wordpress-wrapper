@@ -2,7 +2,7 @@
 operations of the app and their respective routes'''
 
 from app import app, db, dbsession, login
-from app.models import User
+from app.models import User, SpecialTransport
 from app.session import *
 from app.profile import *
 from app.forms import RegistrationForm

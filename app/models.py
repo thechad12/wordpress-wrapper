@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from wordpress_xmlrpc import Client as wp
 from simplecrypt import encrypt, decrypt
+from xmlrpc.client import Transport
 
 
 # Create the user class to be stored in the database
@@ -33,6 +34,9 @@ class User(UserMixin, Base):
 	def __repr__(self):
 		return '<User {}/><Password {}/><URL {}'.format(self.wp_username,
 			self.wp_password, self.wp_url)
+
+class SpecialTransport(Transport):
+	user_agent = 'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:54.0) Gecko/20100101 Firefox/54.0'
 
 
 
