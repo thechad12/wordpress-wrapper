@@ -21,3 +21,10 @@ class ImageUpload(FlaskForm):
 		FileAllowed(['jpg', 'png', 'gif']),
 		'Images Only'])
 	submit = SubmitField('Upload')
+
+
+class LoginForm(FlaskForm):
+	wp_username = StringField('Username', validators=[DataRequired()])
+	wp_password = PasswordField('Password', validators=[DataRequired()])
+	remember_me = BooleanField('Remember Me')
+

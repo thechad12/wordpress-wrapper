@@ -4,16 +4,14 @@ import sqlalchemy
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from flask_htmlmin import HTMLMIN
-from flask_migrate import Migrate
 import os
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 app.config.from_object('config')
 login = LoginManager(app)
 login.login_view = 'wp_connect'
 app.config['MINIFY_PAGE'] = True
-HTMLMIN(app)
 # Check if DB URL is configured (will be in heroku environment for psql)
 # if not, connect to local sqlite db in memory
 try:
@@ -32,6 +30,6 @@ if not os.path.exists(directory):
 app.config['UPLOAD_FOLDER'] = directory'''
 
 from app import views, models, session
-from models import User
-from session import *
+from app.models import User
+from app.session import *
 
