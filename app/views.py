@@ -48,8 +48,8 @@ def check_url(url):
 # Register and create new user
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-	if current_user.is_authenticated:
-		return redirect(url_for('index'))
+	#if current_user.is_authenticated:
+	#	return redirect(url_for('index'))
 	form = RegistrationForm()
 	if form.validate_on_submit():
 		user = User(wp_username=form.wp_username.data, wp_url=form.wp_url.data,
