@@ -78,6 +78,7 @@ def wp_connect():
 
 
 # Query posts of user
+@login_required
 @app.route('/posts/')
 def get_posts():
 	user = current_user
@@ -87,20 +88,22 @@ def get_posts():
 	return render_template('posts/posts.html', wp_posts=wp_posts)
 
 # View specific post
+@login_required
 @app.route('/posts/<int:post_id>')
 def view_post(post_id):
-	check_logged_in(login_session)
-	client = check_login(login_session['url'], login_session['user'],
-			login_session['password'])
+	user = current_user
+	client = check_login(user.wp_url, user.wp_username,
+			login_session['pw'])
 	wp_post = client.call(posts.GetPost(post_id))
 	return render_template('posts/post.html', post=wp_post)
 
 # Create new post
+@login_required
 @app.route('/newpost', methods=['GET', 'POST'])
 def new_post():
-	check_logged_in(login_session)
-	client = check_login(login_session['url'], login_session['user'],
-		login_session['password'])
+	user = current_user
+	client = check_login(user.wp_url, user.wp_username,
+		login_session['pw'])
 	if request.method == 'POST':
 		new_wp_post = WordPressPost()
 		new_wp_post.title = request.form['title']
@@ -113,6 +116,7 @@ def new_post():
 		return render_template('posts/newpost.html')
 
 # Edit existing post
+@login_required
 @app.route('/posts/<int:wp_post_id>/edit', methods=['GET', 'POST'])
 def edit_post(wp_post_id):
 	check_logged_in(login_session)
@@ -131,6 +135,7 @@ def edit_post(wp_post_id):
 		return render_template('posts/editpost.html', wp_post_id=wp_post_id)
 
 # Delete an existing post
+@login_required
 @app.route('/posts/<int:wp_post_id>/delete', methods=['GET', 'POST'])
 def delete_post(wp_post_id):
 	check_logged_in(login_session)
@@ -145,6 +150,7 @@ def delete_post(wp_post_id):
 		return render_template('posts/deletepost.html', wp_post_id=wp_post_id, post=wp_post)
 
 # Show list of wordpress pages
+@login_required
 @app.route('/pages/')
 def get_pages():
 	check_logged_in(login_session)
@@ -155,6 +161,7 @@ def get_pages():
 	return render_template('posts/pages.html')
 
 # Upload image to directory
+@login_required
 @app.route('/upload')
 def upload_image():
 	client = check_login(login_session['url'], login_session['user'],
