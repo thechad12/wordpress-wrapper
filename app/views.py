@@ -60,23 +60,6 @@ def register():
 		return redirect(url_for('login'))
 	return render_template('users/register.html',title='Register', form=form)
 
-
-# Login with wordpress
-@app.route('/wpconnect/', methods=['GET', 'POST'])
-def wp_connect():
-	# Check that state token is the one created on the server
-	if request.args.get('state') != login_session['state']:
-		abort(403)
-	if current_user.is_authenticated:
-		return redirect(url_for('index'))
-	login_session['user'] = request.form['username']
-	login_session['password'] = request.form['password']
-	login_session['url'] = get_url(login_session['user'])
-	check_login(login_session['url'], login_session['user'],
-	login_session['password'])
-	return redirect(url_for('get_posts'))
-
-
 # Query posts of user
 @login_required
 @app.route('/posts/')
