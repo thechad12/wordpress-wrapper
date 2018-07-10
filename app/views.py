@@ -102,9 +102,9 @@ def new_post():
 @login_required
 @app.route('/posts/<int:wp_post_id>/edit', methods=['GET', 'POST'])
 def edit_post(wp_post_id):
-	check_logged_in(login_session)
-	client = check_login(login_session['url'], login_session['user'],
-		login_session['password'])
+	user = current_user
+	client = check_login(user.wp_url, user.wp_username,
+		login_session['pw'])
 	if request.method == 'POST':
 		edit_wp_post = WordPressPost()
 		edit_wp_post.title = request.form['title']
@@ -121,9 +121,9 @@ def edit_post(wp_post_id):
 @login_required
 @app.route('/posts/<int:wp_post_id>/delete', methods=['GET', 'POST'])
 def delete_post(wp_post_id):
-	check_logged_in(login_session)
-	client = check_login(login_session['url'], login_session['user'],
-		login_session['password'])
+	user = current_user
+	client = check_login(user.wp_url, user.wp_username,
+		login_session['pw'])
 	wp_post = client.call(posts.GetPost(wp_post_id))
 	if request.method == 'POST':
 		client.call(posts.DeletePost(wp_post_id))
@@ -137,8 +137,8 @@ def delete_post(wp_post_id):
 @app.route('/pages/')
 def get_pages():
 	check_logged_in(login_session)
-	client = check_login(login_session['url'], login_session['user'],
-		login_session['password'])
+	client = check_login(user.wp_url, user.wp_username,
+		login_session['pw'])
 	wp_pages = client.call(posts.GetPosts({'post_type': 'page'},
 		results_class=WordPressPage))
 	return render_template('posts/pages.html')
@@ -147,8 +147,9 @@ def get_pages():
 @login_required
 @app.route('/upload')
 def upload_image():
-	client = check_login(login_session['url'], login_session['user'],
-		login_session['password'])
+	user = current_user
+	client = check_login(user.wp_url, user.wp_username,
+		login_session['pw'])
 	form = ImageUpload()
 	if form.validate_on_submit():
 		image_data = form.image.data
@@ -168,9 +169,9 @@ def upload_image():
 # to be shown with AJAX request
 @app.route('/filterposts/', methods=['GET', 'POST'])
 def filter_posts():
-	check_logged_in(login_session)
-	client = check_login(login_session['url'], login_session['user'],
-		login_session['password'])
+	user = current_user
+	client = check_login(user.wp_url, user.wp_username,
+		login_session['pw'])
 	if request.method == 'POST':
 		custom_filter = request.form['filter']
 		max_show = request.form['number']
@@ -186,9 +187,9 @@ def filter_posts():
 # to be shown with AJAX request
 @app.route('/orderedposts/', methods=['GET', 'POST'])
 def order_posts():
-	check_logged_in(login_session)
-	client = check_login(login_session['url'], login_session['user'],
-		login_session['password'])
+	user = current_user
+	client = check_login(user.wp_url, user.wp_username,
+		login_session['pw'])
 	if request.method == 'POST':
 		date = request.form['date']
 		title = request.form['title']
