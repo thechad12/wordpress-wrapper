@@ -34,5 +34,6 @@ flask-session = "*"
 simple-crypt = "*"
 flask-migrate = "*"
 
+
 [pipenv]
 allow_prereleases = true

@@ -1,0 +1,18 @@
+{% extends "main.html" %}
+{% block content %}
+
+<div class="edit-post">
+	<form action="{{ url_for('edit_post', wp_post_id=wp_post_id) }}" method="post">
+		<div class="edit-post-form">
+			<dl>
+				<dt>Title:</dt>
+				<dd><input type="text" size="30" name="title"></dd>
+
+				<dt>Content</dt>
+				<dd><input type="text" cols="50" rows="10" name="content"></dd>
+			</dl>
+			<p><button type="submit"><input type="submit" name="publish"></button></p>
+		</div>
+	</form>
+</div>
+{% endblock %}

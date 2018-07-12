@@ -1,7 +1,7 @@
 '''This file contains the logic for logins and session
 management.'''
 
-from app import app, db, dbsession, login
+from app import app, db, dbsession, login, socketio
 from app.models import User, SpecialTransport
 from app.forms import LoginForm
 from flask import session as login_session
@@ -14,6 +14,8 @@ from wordpress_xmlrpc import Client as wp
 from werkzeug.security import check_password_hash
 from simplecrypt import encrypt, decrypt
 from xmlrpc.client import Transport
+from flask_socketio import SocketIO, emit
+
 
 # Function to store login information in session
 @login.user_loader
@@ -60,6 +62,7 @@ def logout():
 	user = current_user
 	logout_user()
 	login_session['logged_in'] = False
+	login_session.pop('pw')
 	flash("You have successfully been logged out")
 	return redirect(url_for('index'))
 
@@ -67,6 +70,13 @@ def logout():
 def check_logged_in(session):
 	if 'user' not in session:
 		return render_template('common/index.html')
+
+# Testing out using socketio to disconnect user
+# and delete session information when session is ended
+# (browser or tab closed)
+@socketio.on('disconnect')
+def disconnect_user():
+	logout()
 
 # Generate csrf token for registration and
 # any other functions where it may be necessary
