@@ -31,9 +31,8 @@ parse = "*"
 "psycopg2-binary" = "*"
 flask-wtf = "*"
 flask-session = "*"
-simple-crypt = "*"
 flask-migrate = "*"
-
+simple-crypt = "*"
 
 [pipenv]
 allow_prereleases = true
