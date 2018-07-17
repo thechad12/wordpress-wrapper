@@ -1,7 +1,7 @@
 '''This file contains the logic for logins and session
 management.'''
 
-from app import app, db, dbsession, login, socketio
+from app import app, db, dbsession, login
 from app.models import User, SpecialTransport
 from app.forms import LoginForm
 from flask import session as login_session
