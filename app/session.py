@@ -14,7 +14,6 @@ from wordpress_xmlrpc import Client as wp
 from werkzeug.security import check_password_hash
 from simplecrypt import encrypt, decrypt
 from xmlrpc.client import Transport
-from flask_socketio import SocketIO, emit
 
 
 # Function to store login information in session
