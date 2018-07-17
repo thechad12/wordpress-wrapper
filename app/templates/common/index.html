@@ -11,12 +11,15 @@
 	<div class="logout-user">
 		<a href="{{ url_for('logout') }}">Logout</a>
 	</div>
+	<div class="posts">
+		<a href="{{ url_for('get_posts') }}">View Posts</a>
+	</div>
 	{% else %}
 	<div class="login">
 		<a href="{{ url_for('login', state=STATE) }}">Login</a>
 	</div>
 	<div class="register">
-		<a href="{{ url_for('register', token=token) }}">Register</a>
+		<a href="{{ url_for('register') }}">Register</a>
 	</div>
 	{% endif %}
 </div>
