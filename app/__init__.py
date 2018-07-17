@@ -6,10 +6,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
 from flask_migrate import Migrate
-from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
-socketio = SocketIO(app)
 app.config.from_object('config')
 login = LoginManager(app)
 login.login_view = 'wp_connect'
