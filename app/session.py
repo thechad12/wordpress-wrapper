@@ -15,6 +15,7 @@ from werkzeug.security import check_password_hash
 from simplecrypt import encrypt, decrypt
 from xmlrpc.client import Transport
 
+
 # Function to store login information in session
 @login.user_loader
 def load_user(user_id):
@@ -40,9 +41,7 @@ def get_url(username):
 def login():
 	#if login_session['logged_in'] is not None and login_session['logged_in'] == True:
 	#	return redirect(url_for('get_posts'))
-	print(current_user.is_authenticated)
 	form = LoginForm()
-	print(form.validate_on_submit)
 	if form.validate_on_submit():
 		user = dbsession.query(User).filter_by(wp_username=form.wp_username.data).first()
 		if user is None or not user.check_password(form.wp_password.data):
@@ -52,7 +51,6 @@ def login():
 		check_login(user.wp_url, user.wp_username, form.wp_password.data)
 		login_session['logged_in'] = True
 		login_session['pw'] = form.wp_password.data
-		print(user)
 		return redirect(url_for('get_posts'))
 	return render_template('users/login.html', title='Log In', form=form)
 
@@ -63,6 +61,7 @@ def logout():
 	user = current_user
 	logout_user()
 	login_session['logged_in'] = False
+	login_session.pop('pw')
 	flash("You have successfully been logged out")
 	return redirect(url_for('index'))
 
