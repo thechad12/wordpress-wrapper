@@ -70,13 +70,6 @@ def check_logged_in(session):
 	if 'user' not in session:
 		return render_template('common/index.html')
 
-# Testing out using socketio to disconnect user
-# and delete session information when session is ended
-# (browser or tab closed)
-@socketio.on('disconnect')
-def disconnect_user():
-	logout()
-
 # Generate csrf token for registration and
 # any other functions where it may be necessary
 # in the future
