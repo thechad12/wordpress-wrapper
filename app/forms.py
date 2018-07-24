@@ -27,4 +27,5 @@ class LoginForm(FlaskForm):
 	wp_username = StringField('Username', validators=[DataRequired()])
 	wp_password = PasswordField('Password', validators=[DataRequired()])
 	remember_me = BooleanField('Remember Me')
+	submit = SubmitField('Login')
 
