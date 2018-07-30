@@ -153,7 +153,8 @@ def upload_image():
 	client = check_login(user.wp_url, user.wp_username,
 		login_session['pw'])
 	form = ImageUpload()
-	if form.validate_on_submit:
+	print(form.validate_on_submit())
+	if form.validate_on_submit():
 		image_data = form.image.data
 		#filename = secure_filename(image_data.filename)
 		wp_image_data = {
@@ -162,7 +163,8 @@ def upload_image():
 		}
 		data['bits'] = xmlrpc_client.Binary(image_data.read())
 		res = client.call(media.UploadFile(data))
-		return res
+		print(res)
+		return
 	else:
 		print(form.image.data)
 		print(form.errors)
