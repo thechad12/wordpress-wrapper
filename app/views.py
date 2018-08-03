@@ -29,7 +29,6 @@ from simplecrypt import encrypt, decrypt
 def index():
  	return render_template('common/index.html',login_session=login_session,current_user=current_user)
 
-
 @app.errorhandler(404)
 def not_found(error):
 	return render_template('error/404.html'), 404
@@ -155,21 +154,25 @@ def upload_image():
 	form = ImageUpload()
 	print(form.validate_on_submit())
 	if form.validate_on_submit():
+		print("valid")
 		image_data = form.image.data
+		print(image_data)
 		#filename = secure_filename(image_data.filename)
 		wp_image_data = {
 			'name': 'image',
 			'type': 'image/jpeg'
 		}
+		print(wp_image_data)
 		data['bits'] = xmlrpc_client.Binary(image_data.read())
+		print(data['bits'])
 		res = client.call(media.UploadFile(data))
 		print(res)
 		return
 	else:
 		print(form.image.data)
 		print(form.errors)
-		#return redirect(url_for('get_posts'))
-	return render_template('files/upload.html', form=form)
+		print("not valid")
+		return render_template('media/upload.html', form=form)
 
 
 # custom filtering functionality,

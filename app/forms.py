@@ -17,9 +17,7 @@ class EditForm(FlaskForm):
 	submit = SubmitField('Edit')
 
 class ImageUpload(FlaskForm):
-	image = FileField('Image', validators=[FileRequired(),
-		FileAllowed(['jpg', 'png', 'gif']),
-		'Images Only'])
+	image = FileField('Image', validators=[FileRequired()])
 	submit = SubmitField('Upload')
 
 
