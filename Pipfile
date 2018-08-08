@@ -32,7 +32,6 @@ parse = "*"
 flask-wtf = "*"
 flask-session = "*"
 flask-migrate = "*"
-simple-crypt = "*"
 
 [pipenv]
 allow_prereleases = true

@@ -4,7 +4,6 @@ import sys
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from wordpress_xmlrpc import Client as wp
-from simplecrypt import encrypt, decrypt
 from xmlrpc.client import Transport
 
 
