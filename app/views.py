@@ -145,7 +145,7 @@ def get_pages():
 
 # Upload image to directory
 @login_required
-@app.route('/upload')
+@app.route('/upload', methods=['GET', 'POST'])
 def upload_image():
 	user = current_user
 	client = check_login(user.wp_url, user.wp_username,
@@ -156,15 +156,18 @@ def upload_image():
 		print("valid")
 		image_data = form.image.data
 		print(image_data)
-		#filename = secure_filename(image_data.filename)
+		filename = secure_filename(image_data.filename)
+		print(filename)
 		wp_image_data = {
 			'name': 'image',
 			'type': 'image/jpeg'
 		}
 		print(wp_image_data)
-		data['bits'] = xmlrpc_client.Binary(image_data.read())
-		print(data['bits'])
-		res = client.call(media.UploadFile(data))
+		# Function seems to fail here. Returns
+		# 405 error and stops.
+		wp_image_data['bits'] = xmlrpc_client.Binary(image_data.read())
+		print(wp_image_data['bits'])
+		res = client.call(media.UploadFile(wp_image_data))
 		print(res)
 		return
 	else:

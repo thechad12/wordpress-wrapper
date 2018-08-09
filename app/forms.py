@@ -17,9 +17,8 @@ class EditForm(FlaskForm):
 	submit = SubmitField('Edit')
 
 class ImageUpload(FlaskForm):
-	image = FileField('Image', validators=[FileRequired()])
+	image = FileField('Image')
 	submit = SubmitField('Upload')
-
 
 class LoginForm(FlaskForm):
 	wp_username = StringField('Username', validators=[DataRequired()])
